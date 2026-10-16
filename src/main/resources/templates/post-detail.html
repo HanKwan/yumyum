@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipe Details | Yumyum</title>
+    <link rel="stylesheet" th:href="@{/post-detail.css}">
+</head>
+<body>
+
+<header class="navbar">
+    <a href="/posts" class="logo">yumyum<span>🍳</span></a>
+
+    <nav class="nav-links">
+        <a href="/posts">Posts</a>
+        <a href="#">My Profile</a>
+    </nav>
+
+    <a href="#" class="create-button">+ Create Post</a>
+</header>
+
+<main class="container">
+
+    <a href="/posts" class="back-link">← Back to Posts</a>
+
+    <article class="recipe">
+
+        <img
+                src="https://iheartumami.com/wp-content/uploads/2021/10/Omurice-with-Shirataki-Rice-I-Heart-Umami.jpg"
+                alt="Homemade Japanese omurice"
+                class="recipe-image"
+        >
+
+        <div class="recipe-content">
+
+            <span class="category">COMFORT FOOD</span>
+
+            <h1>Fluffy Homemade Omurice</h1>
+
+            <div class="recipe-meta">
+                <span>By Hana</span>
+                <span>★ 4.8</span>
+            </div>
+
+            <p class="recipe-description">
+                A comforting Japanese classic made with flavorful
+                fried rice wrapped in a soft, fluffy omelette.
+                Perfect for a cozy homemade meal!
+            </p>
+
+            <section class="ingredients">
+                <h2>Ingredients</h2>
+
+                <ul>
+                    <li>2 eggs</li>
+                    <li>1 bowl of cooked rice</li>
+                    <li>1/2 onion, chopped</li>
+                    <li>100g chicken, cut into small pieces</li>
+                    <li>2 tablespoons ketchup</li>
+                    <li>Salt and pepper, to taste</li>
+                    <li>1 tablespoon cooking oil</li>
+                </ul>
+            </section>
+
+            <section class="instructions">
+                <h2>Cooking Instructions</h2>
+
+                <ol>
+                    <li>
+                        <strong>Prepare the ingredients.</strong>
+                        Chop the onion and chicken into small pieces.
+                    </li>
+                    <li>
+                        <strong>Cook the rice.</strong>
+                        Heat oil in a pan and cook the chicken and onion.
+                        Add the rice and ketchup, then mix well.
+                    </li>
+                    <li>
+                        <strong>Make the omelette.</strong>
+                        Beat the eggs and cook them in a lightly oiled pan
+                        until soft and fluffy.
+                    </li>
+                    <li>
+                        <strong>Put it together.</strong>
+                        Place the fried rice on a plate and cover it
+                        with the omelette. Add ketchup if desired.
+                    </li>
+                </ol>
+            </section>
+
+            <section class="comments">
+                <h2>Comments</h2>
+                <p class="empty-comments">
+                    No comments yet. Be the first to share your thoughts!
+                </p>
+            </section>
+
+        </div>
+    </article>
+
+    <footer>
+        <p>Made with ♡ by the yumyum community</p>
+    </footer>
+
+</main>
+
+</body>
+</html>
+```
