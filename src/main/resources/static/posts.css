@@ -1,0 +1,272 @@
+
+:root {
+    --cream: #fffaf3;
+    --white: #ffffff;
+    --orange: #d97745;
+    --orange-dark: #b9572b;
+    --brown: #3f3028;
+    --muted: #8b7b70;
+    --border: #f0e5d8;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: var(--cream);
+    color: var(--brown);
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 7%;
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+}
+
+.logo {
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--orange-dark);
+}
+
+.logo span {
+    margin-left: 5px;
+}
+
+.nav-links {
+    display: flex;
+    gap: 28px;
+    color: var(--muted);
+    font-size: 14px;
+}
+
+.nav-links a.active,
+.nav-links a:hover {
+    color: var(--orange-dark);
+}
+
+.create-button {
+    padding: 11px 17px;
+    border-radius: 10px;
+    background: var(--orange);
+    color: var(--white);
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.container {
+    width: min(1100px, 86%);
+    margin: 0 auto;
+}
+
+.hero {
+    padding: 70px 0 60px;
+    text-align: center;
+}
+
+.eyebrow {
+    color: var(--orange-dark);
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+.hero h1 {
+    margin: 18px 0;
+    font-size: clamp(34px, 5vw, 52px);
+    line-height: 1.2;
+}
+
+.hero h1 span {
+    color: var(--orange);
+}
+
+.hero-description {
+    max-width: 480px;
+    margin: 0 auto;
+    color: var(--muted);
+    line-height: 1.8;
+}
+
+.search-box {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: min(440px, 100%);
+    margin: 28px auto 0;
+    padding: 14px 18px;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+}
+
+.search-box span {
+    font-size: 23px;
+    color: var(--orange);
+}
+
+.search-box input {
+    width: 100%;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 14px;
+}
+
+.posts-section {
+    padding: 15px 0 60px;
+}
+
+.section-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    margin-bottom: 25px;
+}
+
+.section-heading h2 {
+    margin: 8px 0 0;
+    font-size: 29px;
+}
+
+.post-count {
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.post-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px;
+}
+
+.post-card {
+    overflow: hidden;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 17px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.post-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 28px #5a352010;
+}
+
+.post-image {
+    display: block;
+    width: 100%;
+    height: 210px;
+    object-fit: cover;
+}
+
+.post-content {
+    padding: 19px;
+}
+
+.category {
+    color: var(--orange-dark);
+    font-size: 10px;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.post-content h3 {
+    margin: 11px 0 8px;
+    font-size: 18px;
+}
+
+.post-description {
+    min-height: 40px;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.post-meta {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 18px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+    font-size: 12px;
+}
+
+.post-meta span:last-child {
+    color: var(--orange-dark);
+    font-weight: bold;
+}
+
+footer {
+    padding: 24px 0;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    text-align: center;
+    font-size: 12px;
+}
+
+@media (max-width: 760px) {
+    .navbar {
+        flex-wrap: wrap;
+        gap: 16px;
+        padding: 18px 5%;
+    }
+
+    .nav-links {
+        order: 3;
+        width: 100%;
+        justify-content: center;
+        gap: 20px;
+    }
+
+    .container {
+        width: 90%;
+    }
+
+    .hero {
+        padding: 48px 0;
+    }
+
+    .post-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+    }
+
+    .post-image {
+        height: 160px;
+    }
+
+    .post-content {
+        padding: 13px;
+    }
+
+    .post-content h3 {
+        font-size: 16px;
+    }
+
+    .post-count {
+        display: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .post-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .post-image {
+        height: 220px;
+    }
+}
