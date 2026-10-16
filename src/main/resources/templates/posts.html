@@ -1,0 +1,112 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yumyum</title>
+    <link rel="stylesheet" th:href="@{/posts.css}">
+</head>
+<body>
+<header class="navbar">
+    <a href="/posts" class="logo">yumyum<span>🍳</span></a>
+
+    <nav class="nav-links">
+        <a href="/posts" class="active">Posts</a>
+        <a href="#">My Profile</a>
+    </nav>
+
+    <a href="#" class="create-button">+ Create Post</a>
+</header>
+
+<main class="container">
+    <section class="hero">
+        <p class="eyebrow">GOOD FOOD, GOOD MOOD</p>
+        <h1>Made with love,<br>shared with <span>yumyum.</span></h1>
+        <p class="hero-description">
+            Discover delicious recipes and homemade dishes
+            shared by our cooking community.
+        </p>
+    </section>
+
+    <section class="posts-section">
+        <div class="section-heading">
+            <div>
+                <p class="eyebrow">FROM OUR COMMUNITY</p>
+                <h2>Latest recipes</h2>
+            </div>
+            <span class="post-count">Fresh ideas for your next meal</span>
+        </div>
+
+        <div class="post-grid">
+            <article class="post-card" onclick="openPost(1)">
+                <img
+                        src="https://images.unsplash.com/photo-1590380056829-5f4f8f8c7f4b?auto=format&fit=crop&w=700&q=80"
+                        alt="Homemade Japanese food"
+                        class="post-image"
+                >
+                <div class="post-content">
+                    <span class="category">COMFORT FOOD</span>
+                    <h3>Fluffy Homemade Omurice</h3>
+                    <p class="post-description">
+                        A comforting Japanese classic for any day.
+                    </p>
+                    <div class="post-meta">
+                        <span>By Hana</span>
+                        <span>★ 4.8</span>
+                    </div>
+                </div>
+            </article>
+
+            <article class="post-card" onclick="openPost(2)">
+                <img
+                        src="https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=700&q=80"
+                        alt="Pasta with fresh ingredients"
+                        class="post-image"
+                >
+                <div class="post-content">
+                    <span class="category">QUICK & EASY</span>
+                    <h3>Creamy Tomato Pasta</h3>
+                    <p class="post-description">
+                        An easy pasta dish packed with flavor.
+                    </p>
+                    <div class="post-meta">
+                        <span>By Alex</span>
+                        <span>★ 4.6</span>
+                    </div>
+                </div>
+            </article>
+
+            <article class="post-card" onclick="openPost(3)">
+                <img
+                        src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=700&q=80"
+                        alt="Fresh colorful salad bowl"
+                        class="post-image"
+                >
+                <div class="post-content">
+                    <span class="category">FRESH & LIGHT</span>
+                    <h3>Colorful Garden Bowl</h3>
+                    <p class="post-description">
+                        Fresh vegetables in one happy bowl.
+                    </p>
+                    <div class="post-meta">
+                        <span>By Mia</span>
+                        <span>★ 4.9</span>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <footer>
+        <p>Made with ♡ by the yumyum community</p>
+    </footer>
+</main>
+
+<script>
+    function openPost(id) {
+        window.location.href = "/post-detail?id=" + id;
+    }
+</script>
+</body>
+</html>
