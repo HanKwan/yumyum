@@ -29,7 +29,12 @@ public class PageController {
     }
 
     @GetMapping("/post-detail")
-    public String showPostDetail() {
+    public String showPostDetail(@RequestParam Long id, Model model) {
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Post not found"));
+
+        model.addAttribute("post", post);
+
         return "post-detail";
     }
 
