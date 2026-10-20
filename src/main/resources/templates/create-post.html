@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create a Recipe | Yumyum</title>
+    <link rel="stylesheet" th:href="@{/create-post.css}">
+</head>
+
+<body>
+    <header class="navbar">
+        <a href="/" class="logo">yumyum<span>🍳</span></a>
+
+        <nav class="nav-links">
+            <a href="/">Home</a>
+            <a href="/posts">Posts</a>
+            <a href="#">My Profile</a>
+        </nav>
+    </header>
+
+    <main class="container">
+        <a href="/posts" class="back-link">← Back to Posts</a>
+
+        <section class="form-header">
+            <p class="eyebrow">SHARE SOMETHING DELICIOUS</p>
+            <h1>Create a <span>recipe.</span></h1>
+            <p>Share your homemade dishes with the YumYum community.</p>
+        </section>
+
+        <form class="post-form" action="#" method="post">
+
+            <div class="form-group">
+                <label for="title">Recipe title</label>
+                <input
+                        type="text"
+                        id="title"
+                        name="title"
+                        placeholder="e.g. Fluffy Homemade Omurice"
+                        required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea
+                        id="description"
+                        name="description"
+                        rows="4"
+                        placeholder="Tell us a little about your dish..."
+                        required
+                ></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="imageUrl">Image URL</label>
+                <input
+                        type="url"
+                        id="imageUrl"
+                        name="imageUrl"
+                        placeholder="https://example.com/your-recipe.jpg"
+                >
+                <p class="field-hint">Add a link to a photo of your dish.</p>
+            </div>
+
+            <div class="form-actions">
+                <a href="/posts" class="cancel-button">Cancel</a>
+                <button type="submit" class="submit-button">
+                    Publish Recipe
+                </button>
+            </div>
+        </form>
+
+        <footer>
+            <p>Made with ♡ by the yumyum community</p>
+        </footer>
+    </main>
+
+</body>
+</html>
