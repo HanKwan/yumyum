@@ -37,4 +37,26 @@ public class PageController {
     public String showCreatePost() {
         return "create-post";
     }
+
+    @PostMapping("/posts/new")
+    public String createPost(
+            @RequestParam String title,
+            @RequestParam String description,
+            @RequestParam(required = false) String imageUrl,
+            RedirectAttributes redirectAttributes) {
+
+        Post post = new Post();
+        post.setTitle(title);
+        post.setDescription(description);
+        post.setImageUrl(imageUrl);
+
+        User user = userRepository.findById(1L)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        post.setUser(user);
+
+        postRepository.save(post);
+
+        return "redirect:/posts";
+    }
 }
