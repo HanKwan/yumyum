@@ -15,6 +15,12 @@ public class Post {
 
     private String imageUrl;
 
+    @Column(columnDefinition = "TEXT")  // TEXT support up to 65,535 bytes
+    private String ingredients;
+
+    @Column(columnDefinition = "TEXT")
+    private String instructions;
+
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
@@ -56,5 +62,21 @@ public class Post {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public String getIngredients() {
+        return ingredients;
+    }
+
+    public void setIngredients(String ingredients) {
+        this.ingredients = ingredients;
+    }
+
+    public String getInstructions() {
+        return instructions;
+    }
+
+    public void setInstructions(String instructions) {
+        this.instructions = instructions;
     }
 }
