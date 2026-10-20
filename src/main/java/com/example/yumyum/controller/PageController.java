@@ -4,14 +4,22 @@ import com.example.yumyum.repository.PostRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import com.example.yumyum.entity.Post;
+import com.example.yumyum.entity.User;
+import com.example.yumyum.repository.UserRepository;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class PageController {
 
     private final PostRepository postRepository;
+    private final UserRepository userRepository;
 
-    public PageController(PostRepository postRepository) {
+    public PageController(PostRepository postRepository,  UserRepository userRepository) {
         this.postRepository = postRepository;
+        this.userRepository = userRepository;
     }
 
     @GetMapping("/posts")
