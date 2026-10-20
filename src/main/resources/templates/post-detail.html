@@ -16,7 +16,7 @@
             <a href="#">My Profile</a>
         </nav>
 
-        <a href="#" class="create-button">+ Create Post</a>
+        <a href="/posts/new" class="create-button">+ Create Post</a>
     </header>
 
     <main class="container">
@@ -26,62 +26,42 @@
         <article class="recipe">
 
             <img
+                th:if="${post.imageUrl != null and !#strings.isEmpty(post.imageUrl)}"
                 th:src="${post.imageUrl}"
                 th:alt="${post.title}"
-                alt="Homemade Japanese omurice"
                 class="recipe-image">
 
             <div class="recipe-content">
-
-                <span class="category">COMFORT FOOD</span>
 
                 <h1 th:text="${post.title}">Recipe title</h1>
 
                 <div class="recipe-meta">
                     <span th:text="|By ${post.user.username}|">By user</span>
-                    <span>★ 4.8</span>
                 </div>
 
-                <p class="recipe-description" th:text="${post.description}">Recipe description</p>
+                <p
+                    class="recipe-description"
+                    th:if="${post.description != null and !#strings.isEmpty(post.description)}"
+                    th:text="${post.description}">
+                    Recipe description
+                </p>
 
                 <section class="ingredients">
                     <h2>Ingredients</h2>
 
-                    <ul>
-                        <li>2 eggs</li>
-                        <li>1 bowl of cooked rice</li>
-                        <li>1/2 onion, chopped</li>
-                        <li>100g chicken, cut into small pieces</li>
-                        <li>2 tablespoons ketchup</li>
-                        <li>Salt and pepper, to taste</li>
-                        <li>1 tablespoon cooking oil</li>
-                    </ul>
+                    <div class="ingredients-list"
+                         th:text="${post.ingredients}">
+                        Ingredients will appear here.
+                    </div>
                 </section>
 
                 <section class="instructions">
                     <h2>Cooking Instructions</h2>
 
-                    <ol>
-                        <li>
-                            <strong>Prepare the ingredients.</strong>
-                            Chop the onion and chicken into small pieces.
-                        </li>
-                        <li>
-                            <strong>Cook the rice.</strong>
-                            Heat oil in a pan and cook the chicken and onion.
-                            Add the rice and ketchup, then mix well.
-                        </li>
-                        <li>
-                            <strong>Make the omelette.</strong>
-                            Beat the eggs and cook them in a lightly oiled pan
-                            until soft and fluffy.
-                        </li>
-                        <li>
-                            <strong>Put it together.</strong>
-                            Place the fried rice on a plate and cover it
-                            with the omelette. Add ketchup if desired.
-                        </li>
-                    </ol>
+                    <div class="instructions-list"
+                         th:text="${post.instructions}">
+                        Cooking instructions will appear here.
+                    </div>
                 </section>
 
                 <section class="comments">
@@ -90,13 +70,11 @@
                         No comments yet. Be the first to share your thoughts!
                     </p>
                 </section>
-
             </div>
         </article>
 
         <div th:replace="~{fragments/footer :: footer}"></div>
 
     </main>
-
 </body>
 </html>
