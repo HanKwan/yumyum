@@ -11,6 +11,7 @@ public class Post {
 
     private String title;
 
+    @Column(nullable = false)
     private String description;
 
     private String imageUrl;
