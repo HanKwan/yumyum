@@ -9,7 +9,6 @@ import com.example.yumyum.entity.User;
 import com.example.yumyum.repository.UserRepository;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class PageController {
@@ -46,14 +45,21 @@ public class PageController {
     @PostMapping("/posts/new")
     public String createPost(
             @RequestParam String title,
-            @RequestParam String description,
+            @RequestParam(required = false) String description,
             @RequestParam(required = false) String imageUrl,
-            RedirectAttributes redirectAttributes) {
+            @RequestParam String ingredients,
+            @RequestParam String instructions) {
 
         Post post = new Post();
         post.setTitle(title);
-        post.setDescription(description);
+        post.setDescription(
+                description == null || description.isBlank()
+                        ? null
+                        : description
+        );
         post.setImageUrl(imageUrl);
+        post.setIngredients(ingredients);
+        post.setInstructions(instructions);
 
         User user = userRepository.findById(1L)
                 .orElseThrow(() -> new RuntimeException("User not found"));
