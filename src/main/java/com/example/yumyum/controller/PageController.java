@@ -24,4 +24,9 @@ public class PageController {
     public String showPostDetail() {
         return "post-detail";
     }
+
+    @GetMapping("/posts/new")
+    public String showCreatePost() {
+        return "create-post";
+    }
 }
