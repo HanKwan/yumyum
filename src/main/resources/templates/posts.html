@@ -38,60 +38,28 @@
             <span class="post-count">Fresh ideas for your next meal</span>
         </div>
 
+
         <div class="post-grid">
-            <article class="post-card" onclick="openPost(1)">
-                <img
-                        src="https://iheartumami.com/wp-content/uploads/2021/10/Omurice-with-Shirataki-Rice-I-Heart-Umami.jpg"
-                        alt="Homemade Japanese food"
-                        class="post-image"
-                >
-                <div class="post-content">
-                    <span class="category">COMFORT FOOD</span>
-                    <h3>Fluffy Homemade Omurice</h3>
-                    <p class="post-description">
-                        A comforting Japanese classic for any day.
-                    </p>
-                    <div class="post-meta">
-                        <span>By Hana</span>
-                        <span>★ 4.8</span>
-                    </div>
-                </div>
-            </article>
+            <article class="post-card"
+                     th:each="post : ${posts}"
+                     th:onclick="|window.location.href='/post-detail?id=${post.id}'|">
 
-            <article class="post-card" onclick="openPost(2)">
                 <img
-                        src="https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=700&q=80"
-                        alt="Pasta with fresh ingredients"
+                        th:src="${post.imageUrl}"
+                        th:alt="${post.title}"
                         class="post-image"
                 >
-                <div class="post-content">
-                    <span class="category">QUICK & EASY</span>
-                    <h3>Creamy Tomato Pasta</h3>
-                    <p class="post-description">
-                        An easy pasta dish packed with flavor.
-                    </p>
-                    <div class="post-meta">
-                        <span>By Alex</span>
-                        <span>★ 4.6</span>
-                    </div>
-                </div>
-            </article>
 
-            <article class="post-card" onclick="openPost(3)">
-                <img
-                        src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=700&q=80"
-                        alt="Fresh colorful salad bowl"
-                        class="post-image"
-                >
                 <div class="post-content">
-                    <span class="category">FRESH & LIGHT</span>
-                    <h3>Colorful Garden Bowl</h3>
-                    <p class="post-description">
-                        Fresh vegetables in one happy bowl.
+                    <h3 th:text="${post.title}">Recipe Title</h3>
+
+                    <p class="post-description"
+                       th:text="${post.description}">
+                        Recipe description
                     </p>
+
                     <div class="post-meta">
-                        <span>By Mia</span>
-                        <span>★ 4.9</span>
+                        <span th:text="|By ${post.user.username}|">By User</span>
                     </div>
                 </div>
             </article>
