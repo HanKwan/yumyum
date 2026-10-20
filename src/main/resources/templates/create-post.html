@@ -41,14 +41,13 @@
             </div>
 
             <div class="form-group">
-                <label for="description">Description</label>
+                <label for="description">Description (optional)</label>
                 <textarea
                         id="description"
                         name="description"
                         rows="4"
-                        placeholder="Tell us a little about your dish..."
-                        required
-                ></textarea>
+                        placeholder="Tell us a little about your dish...">
+                </textarea>
             </div>
 
             <div class="form-group">
@@ -60,6 +59,30 @@
                         placeholder="https://example.com/your-recipe.jpg"
                 >
                 <p class="field-hint">Add a link to a photo of your dish.</p>
+            </div>
+
+            <div class="form-group">
+                <label for="ingredients">Ingredients</label>
+                <textarea
+                        id="ingredients"
+                        name="ingredients"
+                        rows="6"
+                        placeholder="1 bowl of rice&#10;2 eggs&#10;1 tbsp soy sauce"
+                        required
+                ></textarea>
+                <p class="field-hint">Enter each ingredient on a new line.</p>
+            </div>
+
+            <div class="form-group">
+                <label for="instructions">Instructions</label>
+                <textarea
+                        id="instructions"
+                        name="instructions"
+                        rows="8"
+                        placeholder="1. Prepare the ingredients&#10;2. Cook everything in a pan&#10;3. Season and serve"
+                        required
+                ></textarea>
+                <p class="field-hint">Enter each cooking step on a new line.</p>
             </div>
 
             <div class="form-actions">
