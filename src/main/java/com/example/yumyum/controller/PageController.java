@@ -1,6 +1,7 @@
 package com.example.yumyum.controller;
 
 import com.example.yumyum.repository.PostRepository;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -47,22 +48,20 @@ public class PageController {
             @RequestParam String title,
             @RequestParam(required = false) String description,
             @RequestParam(required = false) String imageUrl,
-            @RequestParam String ingredients,
-            @RequestParam String instructions) {
+            @RequestParam(required = false) String ingredients,
+            @RequestParam(required = false) String instructions,
+            Authentication authentication) {
 
         Post post = new Post();
         post.setTitle(title);
-        post.setDescription(
-                description == null || description.isBlank()
-                        ? null
-                        : description
-        );
+        post.setDescription(description);
         post.setImageUrl(imageUrl);
         post.setIngredients(ingredients);
         post.setInstructions(instructions);
 
-        User user = userRepository.findById(1L)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        // Find the currently logged-in user
+        User user = userRepository.findByEmail(authentication.getName())
+                .orElseThrow();
 
         post.setUser(user);
 

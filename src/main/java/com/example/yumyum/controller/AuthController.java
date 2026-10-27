@@ -111,11 +111,11 @@ public class AuthController {
 //        ));
 //    }
 //
-//    @GetMapping("/csrf")
-//    public Map<String, String> csrf(CsrfToken csrfToken) {
-//        return Map.of(
-//                "token", csrfToken.getToken(),
-//                "headerName", csrfToken.getHeaderName()
-//        );
-//    }
+    @GetMapping("/csrf")
+    public Map<String, String> csrf(CsrfToken csrfToken) {
+        return Map.of(
+                "token", csrfToken.getToken(),
+                "headerName", csrfToken.getHeaderName()
+        );
+    }
 }

@@ -55,6 +55,7 @@ public class SecurityConfig {
                                 "/api/auth/login"
                         ))
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/posts/new").authenticated()
                         .requestMatchers(
                                 "/api/auth/register",
                                 "/api/auth/login",
