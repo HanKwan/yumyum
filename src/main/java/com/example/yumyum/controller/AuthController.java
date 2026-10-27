@@ -16,6 +16,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.context.SecurityContextRepository;
+import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -96,4 +97,25 @@ public class AuthController {
                     .body(Map.of("error", "Invalid email or password"));
         }
     }
+
+    // for testing login and logout
+//    @GetMapping("/me")
+//    public ResponseEntity<?> me(Authentication authentication) {
+//        User user = userRepository.findByEmail(authentication.getName())
+//                .orElseThrow();
+//
+//        return ResponseEntity.ok(Map.of(
+//                "id", user.getId(),
+//                "username", user.getUsername(),
+//                "email", user.getEmail()
+//        ));
+//    }
+//
+//    @GetMapping("/csrf")
+//    public Map<String, String> csrf(CsrfToken csrfToken) {
+//        return Map.of(
+//                "token", csrfToken.getToken(),
+//                "headerName", csrfToken.getHeaderName()
+//        );
+//    }
 }
