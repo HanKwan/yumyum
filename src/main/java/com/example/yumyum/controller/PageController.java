@@ -29,11 +29,21 @@ public class PageController {
     }
 
     @GetMapping("/post-detail")
-    public String showPostDetail(@RequestParam Long id, Model model) {
+    public String showPostDetail(
+            @RequestParam Long id,
+            Model model,
+            Authentication authentication) {
+
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Post not found"));
 
         model.addAttribute("post", post);
+
+        String currentUserEmail = authentication != null
+                ? authentication.getName()
+                : null;
+
+        model.addAttribute("currentUserEmail", currentUserEmail);
 
         return "post-detail";
     }
@@ -66,6 +76,28 @@ public class PageController {
         post.setUser(user);
 
         postRepository.save(post);
+
+        return "redirect:/posts";
+    }
+
+    @PostMapping("/posts/delete")
+    public String deletePost(
+            @RequestParam Long id,
+            Authentication authentication) {
+
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Post not found"));
+
+        User user = userRepository.findByEmail(authentication.getName())
+                .orElseThrow();
+
+        // Only the post owner can delete it
+        if (!post.getUser().getId().equals(user.getId())) {
+            throw new org.springframework.security.access.AccessDeniedException(
+                    "You cannot delete another user's post");
+        }
+
+        postRepository.delete(post);
 
         return "redirect:/posts";
     }

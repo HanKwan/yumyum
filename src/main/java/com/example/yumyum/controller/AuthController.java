@@ -99,17 +99,17 @@ public class AuthController {
     }
 
     // for testing login and logout
-//    @GetMapping("/me")
-//    public ResponseEntity<?> me(Authentication authentication) {
-//        User user = userRepository.findByEmail(authentication.getName())
-//                .orElseThrow();
-//
-//        return ResponseEntity.ok(Map.of(
-//                "id", user.getId(),
-//                "username", user.getUsername(),
-//                "email", user.getEmail()
-//        ));
-//    }
+    @GetMapping("/me")
+    public ResponseEntity<?> me(Authentication authentication) {
+        User user = userRepository.findByEmail(authentication.getName())
+                .orElseThrow();
+
+        return ResponseEntity.ok(Map.of(
+                "id", user.getId(),
+                "username", user.getUsername(),
+                "email", user.getEmail()
+        ));
+    }
 //
     @GetMapping("/csrf")
     public Map<String, String> csrf(CsrfToken csrfToken) {

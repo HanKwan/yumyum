@@ -55,13 +55,15 @@ public class SecurityConfig {
                                 "/api/auth/login"
                         ))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/posts/new").authenticated()
+                        .requestMatchers("/posts/new", "/posts/delete").authenticated()
                         .requestMatchers(
                                 "/api/auth/register",
                                 "/api/auth/login",
                                 "/posts",
                                 "/posts/**",
                                 "/post-detail",
+                                "/posts.css",
+                                "/post-detail.css",
                                 "/css/**",
                                 "/js/**",
                                 "/images/**"
