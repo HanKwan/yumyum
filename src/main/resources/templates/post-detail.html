@@ -74,7 +74,12 @@
         </article>
 
         <div th:if="${currentUserEmail != null
-             and currentUserEmail == post.user.email}">
+                 and currentUserEmail == post.user.email}">
+
+            <a th:href="@{/posts/edit(id=${post.id})}"
+               class="edit-button">
+                Edit Recipe
+            </a>
 
             <form th:action="@{/posts/delete}"
                   method="post"

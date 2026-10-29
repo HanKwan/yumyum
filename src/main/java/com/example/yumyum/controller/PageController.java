@@ -101,4 +101,66 @@ public class PageController {
 
         return "redirect:/posts";
     }
+
+    @GetMapping("/login")
+    public String showLoginPage() {
+        return "login";
+    }
+
+    @GetMapping("/posts/edit")
+    public String showEditPost(
+            @RequestParam Long id,
+            Model model,
+            Authentication authentication) {
+
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Post not found"));
+
+        User user = userRepository.findByEmail(authentication.getName())
+                .orElseThrow();
+
+        // Only the post owner can edit it
+        if (!post.getUser().getId().equals(user.getId())) {
+            throw new org.springframework.security.access.AccessDeniedException(
+                    "You cannot edit another user's post");
+        }
+
+        model.addAttribute("post", post);
+
+        return "edit-post";
+    }
+
+
+    @PostMapping("/posts/edit")
+    public String updatePost(
+            @RequestParam Long id,
+            @RequestParam String title,
+            @RequestParam(required = false) String description,
+            @RequestParam(required = false) String imageUrl,
+            @RequestParam(required = false) String ingredients,
+            @RequestParam(required = false) String instructions,
+            Authentication authentication) {
+
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Post not found"));
+
+        User user = userRepository.findByEmail(authentication.getName())
+                .orElseThrow();
+
+        // Only the post owner can edit it
+        if (!post.getUser().getId().equals(user.getId())) {
+            throw new org.springframework.security.access.AccessDeniedException(
+                    "You cannot edit another user's post");
+        }
+
+        post.setTitle(title);
+        post.setDescription(description);
+        post.setImageUrl(imageUrl);
+        post.setIngredients(ingredients);
+        post.setInstructions(instructions);
+
+        postRepository.save(post);
+
+        return "redirect:/post-detail?id=" + post.getId();
+    }
 }
