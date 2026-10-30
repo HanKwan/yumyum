@@ -11,6 +11,11 @@
         <div>
             <p>Profile picture not uploaded</p>
 
+            <img th:src="${user.profileImage}"
+                 alt="Profile Picture"
+                 width="120"
+                 height="120">
+
             <h2 th:text="${user.username}">Username</h2>
 
             <p th:if="${user.bio != null and !user.bio.isEmpty()}"

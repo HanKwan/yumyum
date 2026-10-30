@@ -29,6 +29,7 @@ public class User {
     private String password;
 
     private String bio;
+    private String profileImage = "/images/default-profile.png"; // Default profile image path
 
     public User() {
     }
@@ -67,5 +68,13 @@ public class User {
 
     public void setBio(String bio) {
         this.bio = bio;
+    }
+
+    public String getProfileImage() {
+        return profileImage;
+    }
+
+    public void setProfileImage(String profileImage) {
+        this.profileImage = profileImage;
     }
 }

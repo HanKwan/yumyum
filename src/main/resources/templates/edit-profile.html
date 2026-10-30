@@ -7,7 +7,15 @@
 <body>
     <h1>Edit Profile</h1>
 
-    <form th:action="@{/profile/edit}" method="post">
+    <form th:action="@{/profile/edit}" method="post" enctype="multipart/form-data">
+
+        <div>
+            <label for="profileImage">Profile Picture</label>
+            <input type="file"
+                   id="profileImage"
+                   name="profileImage"
+                   accept="image/*">
+        </div>
 
         <input type="hidden"
                th:name="${_csrf.parameterName}"

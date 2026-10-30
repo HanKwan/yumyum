@@ -3,6 +3,7 @@ package com.example.yumyum.controller;
 import com.example.yumyum.entity.Review;
 import com.example.yumyum.repository.PostRepository;
 import com.example.yumyum.repository.ReviewRepository;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,6 +13,14 @@ import com.example.yumyum.entity.User;
 import com.example.yumyum.repository.UserRepository;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.UUID;
 
 @Controller
 public class PageController {
@@ -19,6 +28,9 @@ public class PageController {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
     private final ReviewRepository reviewRepository;
+
+    @Value("${app.upload.dir}")
+    private String uploadDir;
 
     public PageController(PostRepository postRepository,
                           UserRepository userRepository,
@@ -299,7 +311,8 @@ public class PageController {
     public String updateProfile(
             @RequestParam String username,
             @RequestParam(required = false) String bio,
-            Authentication authentication) {
+            @RequestParam(required = false) MultipartFile profileImage,
+            Authentication authentication) throws IOException {
 
         User user = userRepository.findByEmail(authentication.getName())
                 .orElseThrow();
@@ -307,8 +320,84 @@ public class PageController {
         user.setUsername(username);
         user.setBio(bio);
 
+        // Keep the old image path before replacing it
+        String oldImagePath = user.getProfileImage();
+
+        // Update profile picture only if a new image was uploaded
+        if (profileImage != null && !profileImage.isEmpty()) {
+            String imagePath = saveProfileImage(profileImage);
+            user.setProfileImage(imagePath);
+        }
+
         userRepository.save(user);
 
+        // Delete the old image after successfully saving the new path
+        if (profileImage != null && !profileImage.isEmpty()) {
+            deleteOldProfileImage(oldImagePath);
+        }
+
         return "redirect:/profile";
+    }
+
+    private String getImageExtension(String contentType) {
+
+        if (contentType == null) {
+            throw new IllegalArgumentException("Invalid image type");
+        }
+
+        return switch (contentType) {
+            case "image/jpeg" -> ".jpg";
+            case "image/png" -> ".png";
+            case "image/gif" -> ".gif";
+            case "image/webp" -> ".webp";
+            default -> throw new IllegalArgumentException("Unsupported image type");
+        };
+    }
+
+    private String saveProfileImage(MultipartFile file) throws IOException {
+
+        // Get the file extension based on its image type
+        String extension = getImageExtension(file.getContentType());
+
+        // Generate a unique filename
+        String filename = UUID.randomUUID() + extension;
+
+        // Create the upload directory if it doesn't exist
+        Path uploadPath = Paths.get(uploadDir);
+        Files.createDirectories(uploadPath);
+
+        // Save the image
+        Path filePath = uploadPath.resolve(filename);
+
+        Files.copy(
+                file.getInputStream(),
+                filePath,
+                StandardCopyOption.REPLACE_EXISTING
+        );
+
+        // Return the path that will be stored in MySQL
+        return "/uploads/" + filename;
+    }
+
+    private void deleteOldProfileImage(String imagePath) throws IOException {
+
+        // Do not delete the default image or any other image outside uploads
+        if (imagePath == null || !imagePath.startsWith("/uploads/")) {
+            return;
+        }
+
+        // Get the upload directory
+        Path uploadPath = Paths.get(uploadDir).toAbsolutePath().normalize();
+
+        // Get only the filename from the old image path
+        String filename = Paths.get(imagePath).getFileName().toString();
+
+        // Find the old image file
+        Path imageFile = uploadPath.resolve(filename).normalize();
+
+        // Delete it only if it is inside the upload directory
+        if (imageFile.startsWith(uploadPath)) {
+            Files.deleteIfExists(imageFile);
+        }
     }
 }
