@@ -1,7 +1,9 @@
 package com.example.yumyum.repository;
 
+import com.example.yumyum.dto.RatingSummary;
 import com.example.yumyum.entity.Review;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,4 +13,16 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     List<Review> findByPostIdOrderByIdDesc(Long postId);
 
     Optional<Review> findByUserIdAndPostId(Long userId, Long postId);
+
+    @Query("""
+        SELECT new com.example.yumyum.dto.RatingSummary(
+            r.post.id,
+            AVG(r.rating),
+            COUNT(r.id)
+        )
+        FROM Review r
+        GROUP BY r.post.id
+    """)
+
+    List<RatingSummary> findRatingSummaries();
 }

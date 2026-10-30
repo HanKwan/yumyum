@@ -58,6 +58,27 @@
                             Recipe description
                         </p>
 
+                        <div class="post-rating">
+                            <span>★</span>
+
+                            <span th:if="${ratingMap.containsKey(post.id)}"
+                                  th:text="${#numbers.formatDecimal(ratingMap.get(post.id).averageRating, 1, 1)}">
+                                0.0
+                            </span>
+
+                            <span th:unless="${ratingMap.containsKey(post.id)}">
+                                0.0
+                            </span>
+
+                            <span th:if="${ratingMap.containsKey(post.id)}"
+                                  th:text="|(${ratingMap.get(post.id).reviewCount} reviews)|">
+                             </span>
+
+                            <span th:unless="${ratingMap.containsKey(post.id)}">
+                                (0 reviews)
+                            </span>
+                        </div>
+
                         <!--clickable profile-->
                         <div class="post-meta">
                             <a th:href="@{/profile(id=${post.user.id})}"

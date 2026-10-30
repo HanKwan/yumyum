@@ -13,10 +13,10 @@
 
         <nav class="nav-links">
             <a href="/posts">Posts</a>
-            <a href="#">My Profile</a>
+            <a th:href="@{/profile}">My Profile</a>
         </nav>
 
-        <a href="/posts/new" class="create-button">+ Create Post</a>
+        <a th:href="@{/posts/new}" class="create-button">+ Create Post</a>
     </header>
 
     <main class="container">
@@ -34,6 +34,27 @@
             <div class="recipe-content">
 
                 <h1 th:text="${post.title}">Recipe title</h1>
+
+                <div class="post-rating">
+                    <span>★</span>
+
+                    <span th:if="${ratingMap.containsKey(post.id)}"
+                          th:text="${#numbers.formatDecimal(ratingMap.get(post.id).averageRating, 1, 1)}">
+                        0.0
+                    </span>
+
+                    <span th:unless="${ratingMap.containsKey(post.id)}">
+                        0.0
+                    </span>
+
+                    <span th:if="${ratingMap.containsKey(post.id)}"
+                          th:text="|(${ratingMap.get(post.id).reviewCount} reviews)|">
+                    </span>
+
+                    <span th:unless="${ratingMap.containsKey(post.id)}">
+                        (0 reviews)
+                    </span>
+                </div>
 
                 <div class="recipe-meta">
                     <a th:href="@{/profile(id=${post.user.id})}"

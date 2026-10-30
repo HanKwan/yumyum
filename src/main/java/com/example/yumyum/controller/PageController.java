@@ -1,5 +1,6 @@
 package com.example.yumyum.controller;
 
+import com.example.yumyum.dto.RatingSummary;
 import com.example.yumyum.entity.Review;
 import com.example.yumyum.repository.PostRepository;
 import com.example.yumyum.repository.ReviewRepository;
@@ -20,7 +21,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Controller
 public class PageController {
@@ -42,7 +46,20 @@ public class PageController {
 
     @GetMapping("/posts")
     public String showPosts(Model model) {
+
         model.addAttribute("posts", postRepository.findAll());
+
+        List<RatingSummary> summaries =
+                reviewRepository.findRatingSummaries();
+
+        Map<Long, RatingSummary> ratingMap = summaries.stream()
+                .collect(Collectors.toMap(
+                        RatingSummary::getPostId,
+                        summary -> summary
+                ));
+
+        model.addAttribute("ratingMap", ratingMap);
+
         return "posts";
     }
 
@@ -82,6 +99,18 @@ public class PageController {
         }
 
         model.addAttribute("currentUserReview", currentUserReview);
+
+        // passing rating data to post detail page
+        List<RatingSummary> summaries =
+                reviewRepository.findRatingSummaries();
+
+        Map<Long, RatingSummary> ratingMap = summaries.stream()
+                .collect(Collectors.toMap(
+                        RatingSummary::getPostId,
+                        summary -> summary
+                ));
+
+        model.addAttribute("ratingMap", ratingMap);
 
         return "post-detail";
     }
@@ -284,6 +313,17 @@ public class PageController {
                 "posts",
                 postRepository.findByUserIdOrderByIdDesc(user.getId())
         );
+
+        List<RatingSummary> summaries =
+                reviewRepository.findRatingSummaries();
+
+        Map<Long, RatingSummary> ratingMap = summaries.stream()
+                .collect(Collectors.toMap(
+                        RatingSummary::getPostId,
+                        summary -> summary
+                ));
+
+        model.addAttribute("ratingMap", ratingMap);
 
         String currentUserEmail = authentication != null
                 ? authentication.getName()
