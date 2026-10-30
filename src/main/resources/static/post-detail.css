@@ -231,3 +231,35 @@ footer {
     color: #666;
     margin: 16px 0 28px;
 }
+
+
+/* Recipe action buttons */
+.edit-button,
+.delete-button {
+    display: inline-block;
+    padding: 10px 18px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.edit-button {
+    background-color: #f0f0f0;
+    color: #333;
+    margin-right: 8px;
+}
+
+.delete-button {
+    background-color: #e57373;
+    color: white;
+}
+
+.edit-button:hover {
+    background-color: #e0e0e0;
+}
+
+.delete-button:hover {
+    background-color: #d9534f;
+}

@@ -3,77 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
     <title>Temporary Login | YumYum</title>
 </head>
+
 <body>
-<h1>YumYum - Temporary Login</h1>
+    <h1>YumYum - Temporary Login</h1>
 
-<form id="loginForm">
-    <div>
-        <label for="email">Email</label>
-        <input type="email" id="email" required>
-    </div>
+    <form id="loginForm">
+        <div>
+            <label for="email">Email</label>
+            <input type="email" id="email" required>
+        </div>
 
-    <div>
-        <label for="password">Password</label>
-        <input type="password" id="password" required>
-    </div>
+        <div>
+            <label for="password">Password</label>
+            <input type="password" id="password" required>
+        </div>
 
-    <button type="submit">Login</button>
-</form>
+        <button type="submit">Login</button>
+    </form>
 
-<p id="message"></p>
+    <p id="message"></p>
 
-<button id="logoutButton" type="button">Logout</button>
+    <button id="logoutButton" type="button">Logout</button>
 
-<script>
-    const loginForm = document.getElementById("loginForm");
-    const message = document.getElementById("message");
-    const logoutButton = document.getElementById("logoutButton");
+    <script>
+        const loginForm = document.getElementById("loginForm");
+        const message = document.getElementById("message");
+        const logoutButton = document.getElementById("logoutButton");
 
-    loginForm.addEventListener("submit", async (event) => {
-        event.preventDefault();
+        loginForm.addEventListener("submit", async (event) => {
+            event.preventDefault();
 
-        try {
-            const response = await fetch("/api/auth/login", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    email: document.getElementById("email").value,
-                    password: document.getElementById("password").value
-                })
-            });
+            try {
+                const response = await fetch("/api/auth/login", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        email: document.getElementById("email").value,
+                        password: document.getElementById("password").value
+                    })
+                });
 
-            const data = await response.json();
+                const data = await response.json();
 
-            if (!response.ok) {
-                message.textContent = data.error || "Login failed.";
-                return;
+                if (!response.ok) {
+                    message.textContent = data.error || "Login failed.";
+                    return;
+                }
+
+                message.textContent = `Logged in as ${data.email}`;
+            } catch (error) {
+                message.textContent = "Could not connect to the server.";
             }
+        });
 
-            message.textContent = `Logged in as ${data.email}`;
-        } catch (error) {
-            message.textContent = "Could not connect to the server.";
-        }
-    });
+        logoutButton.addEventListener("click", async () => {
+            try {
+                const csrfToken = document.querySelector(
+                    'meta[name="_csrf"]'
+                ).content;
 
-    logoutButton.addEventListener("click", async () => {
-        try {
-            const response = await fetch("/api/auth/logout", {
-                method: "POST"
-            });
+                const csrfHeader = document.querySelector(
+                    'meta[name="_csrf_header"]'
+                ).content;
 
-            if (response.ok) {
-                message.textContent = "Logged out.";
-            } else {
-                message.textContent = "Logout failed.";
+                const response = await fetch("/api/auth/logout", {
+                    method: "POST",
+                    headers: {
+                        [csrfHeader]: csrfToken
+                    }
+                });
+
+                if (response.ok) {
+                    message.textContent = "Logged out.";
+                } else {
+                    message.textContent = "Logout failed.";
+                }
+            } catch (error) {
+                message.textContent = "Could not connect to the server.";
             }
-        } catch (error) {
-            message.textContent = "Could not connect to the server.";
-        }
-    });
-</script>
+        });
+    </script>
 </body>
 </html>

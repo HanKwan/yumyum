@@ -1,6 +1,8 @@
 package com.example.yumyum.controller;
 
+import com.example.yumyum.entity.Review;
 import com.example.yumyum.repository.PostRepository;
+import com.example.yumyum.repository.ReviewRepository;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,10 +18,14 @@ public class PageController {
 
     private final PostRepository postRepository;
     private final UserRepository userRepository;
+    private final ReviewRepository reviewRepository;
 
-    public PageController(PostRepository postRepository,  UserRepository userRepository) {
+    public PageController(PostRepository postRepository,
+                          UserRepository userRepository,
+                          ReviewRepository reviewRepository) {
         this.postRepository = postRepository;
         this.userRepository = userRepository;
+        this.reviewRepository = reviewRepository;
     }
 
     @GetMapping("/posts")
@@ -31,13 +37,20 @@ public class PageController {
     @GetMapping("/post-detail")
     public String showPostDetail(
             @RequestParam Long id,
+            @RequestParam(required = false) String error,
             Model model,
             Authentication authentication) {
 
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Post not found"));
 
+        model.addAttribute(
+                "reviews",
+                reviewRepository.findByPostIdOrderByIdDesc(id)
+        );
+
         model.addAttribute("post", post);
+        model.addAttribute("error", error);
 
         String currentUserEmail = authentication != null
                 ? authentication.getName()
@@ -162,5 +175,35 @@ public class PageController {
         postRepository.save(post);
 
         return "redirect:/post-detail?id=" + post.getId();
+    }
+
+    @PostMapping("/reviews/new")
+    public String createReview(
+            @RequestParam Long postId,
+            @RequestParam String content,
+            @RequestParam int rating,
+            Authentication authentication) {
+
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new RuntimeException("Post not found"));
+
+        User user = userRepository.findByEmail(authentication.getName())
+                .orElseThrow();
+
+        // Only allow one review per user per post
+        if (reviewRepository.findByUserIdAndPostId(
+                user.getId(), postId).isPresent()) {
+            return "redirect:/post-detail?id=" + postId + "&error=already-reviewed";
+        }
+
+        Review review = new Review();
+        review.setContent(content);
+        review.setRating(rating);
+        review.setUser(user);
+        review.setPost(post);
+
+        reviewRepository.save(review);
+
+        return "redirect:/post-detail?id=" + postId;
     }
 }
