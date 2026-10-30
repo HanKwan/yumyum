@@ -86,8 +86,14 @@
                         You have already reviewed this recipe.
                     </p>
 
-                    <div class="review-form" th:if="${currentUserEmail != null
-                            and currentUserEmail != post.user.email}">
+                    <div th:if="${currentUserReview != null}">
+                        <h3>You already reviewed this recipe</h3>
+                    </div>
+
+                    <div class="review-form"
+                            th:if="${currentUserEmail != null
+                            and currentUserEmail != post.user.email
+                            and currentUserReview == null}">
                         <h3>Write a Review</h3>
 
                         <form th:action="@{/reviews/new}" method="post">

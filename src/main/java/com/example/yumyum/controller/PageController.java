@@ -58,6 +58,19 @@ public class PageController {
 
         model.addAttribute("currentUserEmail", currentUserEmail);
 
+        Review currentUserReview = null;
+
+        if (authentication != null) {
+            User currentUser = userRepository.findByEmail(authentication.getName())
+                    .orElseThrow();
+
+            currentUserReview = reviewRepository.findByUserIdAndPostId(
+                    currentUser.getId(), id
+            ).orElse(null);
+        }
+
+        model.addAttribute("currentUserReview", currentUserReview);
+
         return "post-detail";
     }
 
