@@ -219,4 +219,28 @@ public class PageController {
 
         return "redirect:/post-detail?id=" + postId;
     }
+
+    @PostMapping("/reviews/delete")
+    public String deleteReview(
+            @RequestParam Long id,
+            Authentication authentication) {
+
+        Review review = reviewRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Review not found"));
+
+        User user = userRepository.findByEmail(authentication.getName())
+                .orElseThrow();
+
+        // Only the review owner can delete it
+        if (!review.getUser().getId().equals(user.getId())) {
+            throw new org.springframework.security.access.AccessDeniedException(
+                    "You cannot delete another user's review");
+        }
+
+        Long postId = review.getPost().getId();
+
+        reviewRepository.delete(review);
+
+        return "redirect:/post-detail?id=" + postId;
+    }
 }
