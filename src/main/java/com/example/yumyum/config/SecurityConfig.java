@@ -60,6 +60,7 @@ public class SecurityConfig {
                                 "/login",
                                 "/api/auth/register",
                                 "/api/auth/login",
+                                "/profile",
                                 "/posts",
                                 "/posts/**",
                                 "/post-detail",

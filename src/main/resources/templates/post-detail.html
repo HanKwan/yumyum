@@ -36,7 +36,10 @@
                 <h1 th:text="${post.title}">Recipe title</h1>
 
                 <div class="recipe-meta">
-                    <span th:text="|By ${post.user.username}|">By user</span>
+                    <a th:href="@{/profile(id=${post.user.id})}"
+                       th:text="|By ${post.user.username}|">
+                        By user
+                    </a>
                 </div>
 
                 <p
@@ -74,7 +77,10 @@
 
                     <div th:each="review : ${reviews}" class="review-item">
                         <div class="review-header">
-                            <strong th:text="${review.user.username}">Username</strong>
+                            <a th:href="@{/profile(id=${review.user.id})}"
+                               th:text="${review.user.username}">
+                                Username
+                            </a>
                             <span th:text="|★ ${review.rating}/5|">★ 5/5</span>
                         </div>
 

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>User Profile</title>
+    </head>
+
+    <body>
+        <h1>User Profile</h1>
+
+        <div>
+            <p>Profile picture not uploaded</p>
+
+            <h2 th:text="${user.username}">Username</h2>
+
+            <p th:if="${user.bio != null and !user.bio.isEmpty()}"
+               th:text="${user.bio}">
+                User bio
+            </p>
+
+            <p th:if="${user.bio == null or user.bio.isEmpty()}">
+                No bio yet.
+            </p>
+        </div>
+
+        <hr>
+
+        <h2>Recipes</h2>
+
+        <div th:if="${#lists.isEmpty(posts)}">
+            <p>This user hasn't posted any recipes yet.</p>
+        </div>
+
+        <div th:each="post : ${posts}">
+            <h3>
+                <a th:href="@{/post-detail(id=${post.id})}"
+                   th:text="${post.title}">
+                    Recipe title
+                </a>
+            </h3>
+
+            <p th:text="${post.description}">Recipe description</p>
+        </div>
+    </body>
+</html>

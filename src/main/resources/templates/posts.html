@@ -58,8 +58,13 @@
                             Recipe description
                         </p>
 
+                        <!--clickable profile-->
                         <div class="post-meta">
-                            <span th:text="|By ${post.user.username}|">By User</span>
+                            <a th:href="@{/profile(id=${post.user.id})}"
+                               th:text="|By ${post.user.username}|"
+                               onclick="event.stopPropagation()">
+                                By User
+                            </a>
                         </div>
                     </div>
                 </article>

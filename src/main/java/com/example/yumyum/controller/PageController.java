@@ -243,4 +243,36 @@ public class PageController {
 
         return "redirect:/post-detail?id=" + postId;
     }
+
+    @GetMapping("/profile")
+    public String showProfile(
+            @RequestParam(required = false) Long id,
+            Model model,
+            Authentication authentication) {
+
+        User user;
+
+        if (id == null) {
+            if(authentication == null) {
+                return "redirect:/login";
+            }
+
+            // Show the currently logged-in user's profile
+            user = userRepository.findByEmail(authentication.getName())
+                    .orElseThrow();
+        } else {
+            // Show another user's profile
+            user = userRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("User not found"));
+        }
+
+        model.addAttribute("user", user);
+
+        model.addAttribute(
+                "posts",
+                postRepository.findByUserIdOrderByIdDesc(user.getId())
+        );
+
+        return "profile";
+    }
 }

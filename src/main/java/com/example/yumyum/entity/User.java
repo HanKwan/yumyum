@@ -28,6 +28,8 @@ public class User {
     @NotBlank
     private String password;
 
+    private String bio;
+
     public User() {
     }
 
@@ -57,5 +59,13 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getBio() {
+        return bio;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio;
     }
 }
