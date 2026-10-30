@@ -273,6 +273,42 @@ public class PageController {
                 postRepository.findByUserIdOrderByIdDesc(user.getId())
         );
 
+        String currentUserEmail = authentication != null
+                ? authentication.getName()
+                : null;
+
+        model.addAttribute("currentUserEmail", currentUserEmail);
+
         return "profile";
+    }
+
+    @GetMapping("/profile/edit")
+    public String showEditProfile(
+            Authentication authentication,
+            Model model) {
+
+        User user = userRepository.findByEmail(authentication.getName())
+                .orElseThrow();
+
+        model.addAttribute("user", user);
+
+        return "edit-profile";
+    }
+
+    @PostMapping("/profile/edit")
+    public String updateProfile(
+            @RequestParam String username,
+            @RequestParam(required = false) String bio,
+            Authentication authentication) {
+
+        User user = userRepository.findByEmail(authentication.getName())
+                .orElseThrow();
+
+        user.setUsername(username);
+        user.setBio(bio);
+
+        userRepository.save(user);
+
+        return "redirect:/profile";
     }
 }
