@@ -76,18 +76,26 @@
             Here's a random selection of recipes for you.
         </p>
 
-        <div class="empty-state"
-             th:if="${#lists.isEmpty(discoverData.recipeName)}">
-
-            <span th:if="${selectedArea != null and !selectedArea.isBlank()
-                          and selectedIngredient != null and !selectedIngredient.isBlank()}">
+        <div class="empty-state discover-empty-state"
+             th:if="${discoverData.recipeName.isEmpty()}">
+            <span class="discover-empty-icon" aria-hidden="true">⌕</span>
+            <h3>No recipes to show</h3>
+            <p th:if="${selectedArea != null and !selectedArea.isBlank()
+                       and selectedIngredient != null and !selectedIngredient.isBlank()}">
                 No recipes found for this area and ingredient combination.
-            </span>
-
-                    <span th:unless="${selectedArea != null and !selectedArea.isBlank()
-                              and selectedIngredient != null and !selectedIngredient.isBlank()}">
-                No recipes found. Try different filters.
-            </span>
+            </p>
+            <p th:if="${selectedArea != null and !selectedArea.isBlank()
+                       and (selectedIngredient == null or selectedIngredient.isBlank())}">
+                No recipes found for this area. Try another area.
+            </p>
+            <p th:if="${selectedIngredient != null and !selectedIngredient.isBlank()
+                       and (selectedArea == null or selectedArea.isBlank())}">
+                No recipes found for this ingredient. Try another ingredient.
+            </p>
+            <p th:if="${(selectedArea == null or selectedArea.isBlank())
+                       and (selectedIngredient == null or selectedIngredient.isBlank())}">
+                No recipes available right now. Please try again later.
+            </p>
         </div>
 
         <div class="discover-grid">

@@ -2,6 +2,7 @@ package com.example.yumyum.controller;
 
 import com.example.yumyum.client.RecipeApiClient;
 import com.example.yumyum.config.DiscoverCombinationConfig;
+import com.example.yumyum.dto.DiscoverRecipesResponse;
 import com.example.yumyum.dto.RatingSummary;
 import com.example.yumyum.entity.Review;
 import com.example.yumyum.repository.PostRepository;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.node.JsonNodeFactory;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -64,10 +66,17 @@ public class PageController {
             @RequestParam(required = false) String ingredient,
             Model model) {
 
-        model.addAttribute(
-                "discoverData",
-                externalRecipeService.getDiscoverRecipes(area, ingredient)
-        );
+        DiscoverRecipesResponse discoverData =
+                externalRecipeService.getDiscoverRecipes(area, ingredient);
+
+        if (discoverData == null || discoverData.recipeName() == null) {
+            discoverData = new DiscoverRecipesResponse(
+                    null,
+                    JsonNodeFactory.instance.arrayNode()
+            );
+        }
+
+        model.addAttribute("discoverData", discoverData);
 
         model.addAttribute(
                 "recommendedRecipes",

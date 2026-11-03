@@ -116,6 +116,42 @@ section h2 {
     font-size: 14px;
 }
 
+.discover-empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 190px;
+    margin: 8px 0 18px;
+    padding: 28px 20px;
+    text-align: center;
+}
+
+.discover-empty-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: #fff3ec;
+    color: #d66b3d;
+    font-size: 30px;
+    line-height: 1;
+}
+
+.discover-empty-state h3 {
+    margin: 4px 0 0;
+    color: #302e2b;
+    font-size: 17px;
+}
+
+.discover-empty-state p {
+    margin: 0;
+    line-height: 1.5;
+}
+
 .discover-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
