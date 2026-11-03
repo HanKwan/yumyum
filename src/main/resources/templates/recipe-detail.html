@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${recipe.get('strMeal').asText()}">Recipe Details</title>
+</head>
+<body>
+
+<a th:href="@{/}">← Back to Home</a>
+
+<main>
+    <h1 th:text="${recipe.get('strMeal').asText()}"></h1>
+
+    <img th:src="${recipe.get('strMealThumb').asText()}"
+         th:alt="${recipe.get('strMeal').asText()}"
+         style="max-width: 400px; width: 100%;">
+
+    <p>
+        <span th:text="${recipe.get('strCategory').asText()}"></span>
+        ·
+        <span th:text="${recipe.get('strArea').asText()}"></span>
+    </p>
+
+    <h2>Ingredients</h2>
+    <ul>
+        <li th:each="i : ${#numbers.sequence(1, 20)}"
+            th:if="${!#strings.isEmpty(recipe.path('strIngredient' + i).asText())}">
+            <span th:text="${recipe.path('strIngredient' + i).asText()}"></span>
+            <span th:text="${recipe.path('strMeasure' + i).asText()}"></span>
+        </li>
+    </ul>
+
+    <h2>Instructions</h2>
+    <p style="white-space: pre-line;"
+       th:text="${recipe.get('strInstructions').asText()}"></p>
+
+    <p th:if="${!#strings.isEmpty(recipe.path('strYoutube').asText())}">
+        <a th:href="${recipe.path('strYoutube').asText()}"
+           target="_blank"
+           rel="noopener noreferrer">
+            Watch on YouTube
+        </a>
+    </p>
+
+    <p th:if="${!#strings.isEmpty(recipe.path('strSource').asText())}">
+        <a th:href="${recipe.path('strSource').asText()}"
+           target="_blank"
+           rel="noopener noreferrer">
+            Original Recipe
+        </a>
+    </p>
+</main>
+
+</body>
+</html>

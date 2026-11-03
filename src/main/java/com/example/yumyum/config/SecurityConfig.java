@@ -70,6 +70,7 @@ public class SecurityConfig {
                                 "/posts",
                                 "/posts/**",
                                 "/post-detail",
+                                "/recipe-detail",
                                 "/posts.css",
                                 "/post-detail.css",
                                 "/css/**",

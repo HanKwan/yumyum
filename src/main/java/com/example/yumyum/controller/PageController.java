@@ -516,4 +516,24 @@ public class PageController {
             Files.deleteIfExists(imageFile);
         }
     }
+
+    @GetMapping("/recipe-detail")
+    public String showRecipeDetail(@RequestParam String id, Model model) {
+
+        JsonNode response = externalRecipeService.getRecipeById(id);
+
+        if (response == null) {
+            return "redirect:/";
+        }
+
+        JsonNode recipe = response.path("meals").path(0);
+
+        if (recipe.isMissingNode() || recipe.isNull()) {
+            return "redirect:/";
+        }
+
+        model.addAttribute("recipe", recipe);
+
+        return "recipe-detail";
+    }
 }

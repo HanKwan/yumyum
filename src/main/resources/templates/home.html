@@ -99,8 +99,9 @@
         </div>
 
         <div class="discover-grid">
-            <div class="discover-item"
-                 th:each="meal : ${discoverData.recipeName}">
+            <a th:each="meal : ${discoverData.recipeName}"
+               th:href="@{/recipe-detail(id=${meal.get('idMeal').asText()})}"
+               class="discover-item">
 
                 <img th:src="${meal.get('strMealThumb').asText()}"
                      th:alt="${meal.get('strMeal').asText()}">
@@ -130,7 +131,7 @@
                     </p>
                 </div>
 
-            </div>
+            </a>
         </div>
     </section>
 
@@ -143,14 +144,15 @@
         </p>
 
         <div class="recipe-list">
-            <div class="recipe-item"
-                 th:each="meal : ${recommendedRecipes}">
+            <a th:each="meal : ${recommendedRecipes}"
+               th:href="@{/recipe-detail(id=${meal.get('idMeal').asText()})}"
+               class="recipe-item">
 
                 <img th:src="${meal.get('strMealThumb').asText()}"
                      th:alt="${meal.get('strMeal').asText()}">
 
                 <h3 th:text="${meal.get('strMeal').asText()}"></h3>
-            </div>
+            </a>
         </div>
     </section>
 

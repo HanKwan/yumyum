@@ -188,4 +188,8 @@ public class ExternalRecipeService {
     public JsonNode getRecommendedRecipes() {
         return recipeApiClient.getRandomRecipes(8);
     }
+
+    public JsonNode getRecipeById(String id) {
+        return recipeApiClient.getRecipeById(id);
+    }
 }
