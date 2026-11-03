@@ -2,24 +2,68 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>YumYum</title>
     <link rel="stylesheet" th:href="@{/home.css}">
 </head>
 <body>
 
-<header>
-    <h1>YumYum</h1>
-    <p>Discover recipes and share your cooking.</p>
+<!-- Navigation -->
+<header class="navbar">
+    <a th:href="@{/}" class="logo-link">
+        <img th:src="@{/images/yum yum logo.png}" alt="YumYum logo">
+    </a>
+
+    <nav>
+        <a th:href="@{/}" class="active">Home</a>
+        <a th:href="@{/posts/new}">＋ Post</a>
+        <a th:href="@{/profile}">Profile</a>
+    </nav>
 </header>
 
-<main>
-    <!-- Discover Recipes -->
-    <section>
-        <h2>Discover Recipes</h2>
+<!-- Hero Banner -->
+<section class="hero">
+    <div class="hero-content">
+        <p class="hero-eyebrow">WELCOME TO YUM YUM</p>
+        <h1>Discover Delicious Recipes</h1>
+        <p class="hero-description">
+            Find inspiration for your next meal, explore new flavors,
+            and share your favorite recipes with the community.
+        </p>
 
-        <form th:action="@{/}" method="get">
+        <form class="hero-search" th:action="@{/search}" method="get">
+            <input
+                    type="text"
+                    name="query"
+                    placeholder="Search for a recipe..."
+                    aria-label="Search for a recipe">
+            <button type="submit">Search</button>
+        </form>
+    </div>
+
+    <div class="hero-image">
+        <img th:src="@{/images/pp.png}" alt="A delicious hotpot meal">
+    </div>
+</section>
+
+<main>
+
+
+    <!-- Discover Recipes -->
+    <section class="content-section discover-section">
+        <div class="section-heading">
+            <div>
+                <p class="section-eyebrow">EXPLORE SOMETHING NEW</p>
+                <h2>Discover Recipes</h2>
+                <p class="section-description">
+                    Find recipes based on your favorite ingredients and cuisines.
+                </p>
+            </div>
+        </div>
+
+        <form th:action="@{/}" method="get" class="discover-form">
             <div class="discover-filters">
-                <div>
+                <div class="filter-group">
                     <label for="discoverArea">Area</label>
                     <select id="discoverArea" name="area">
                         <option value="">Any Areas</option>
@@ -31,7 +75,7 @@
                     </select>
                 </div>
 
-                <div>
+                <div class="filter-group">
                     <label for="discoverIngredient">Ingredient</label>
                     <select id="discoverIngredient" name="ingredient">
                         <option value="">Any Ingredients</option>
@@ -42,12 +86,12 @@
                         </option>
                     </select>
                 </div>
-            </div>
 
-            <button type="submit">Discover</button>
+                <button type="submit" class="discover-button">Discover</button>
+            </div>
         </form>
 
-        <p class="section-description"
+        <p class="section-description filter-description"
            th:if="${selectedArea != null and !selectedArea.isBlank()
            and selectedIngredient != null and !selectedIngredient.isBlank()}">
             Explore recipes using
@@ -56,21 +100,19 @@
             <strong th:text="${selectedIngredient}"></strong>
         </p>
 
-        <p class="section-description"
+        <p class="section-description filter-description"
            th:if="${selectedArea != null and !selectedArea.isBlank()
            and (selectedIngredient == null or selectedIngredient.isBlank())}">
-            Explore recipes from
-            <strong th:text="${selectedArea}"></strong>
+            Explore recipes from <strong th:text="${selectedArea}"></strong>
         </p>
 
-        <p class="section-description"
+        <p class="section-description filter-description"
            th:if="${selectedIngredient != null and !selectedIngredient.isBlank()
            and (selectedArea == null or selectedArea.isBlank())}">
-            Explore recipes with
-            <strong th:text="${selectedIngredient}"></strong>
+            Explore recipes with <strong th:text="${selectedIngredient}"></strong>
         </p>
 
-        <p class="section-description"
+        <p class="section-description filter-description"
            th:if="${(selectedArea == null or selectedArea.isBlank())
            and (selectedIngredient == null or selectedIngredient.isBlank())}">
             Here's a random selection of recipes for you.
@@ -80,18 +122,22 @@
              th:if="${discoverData.recipeName.isEmpty()}">
             <span class="discover-empty-icon" aria-hidden="true">⌕</span>
             <h3>No recipes to show</h3>
+
             <p th:if="${selectedArea != null and !selectedArea.isBlank()
                        and selectedIngredient != null and !selectedIngredient.isBlank()}">
                 No recipes found for this area and ingredient combination.
             </p>
+
             <p th:if="${selectedArea != null and !selectedArea.isBlank()
                        and (selectedIngredient == null or selectedIngredient.isBlank())}">
                 No recipes found for this area. Try another area.
             </p>
+
             <p th:if="${selectedIngredient != null and !selectedIngredient.isBlank()
                        and (selectedArea == null or selectedArea.isBlank())}">
                 No recipes found for this ingredient. Try another ingredient.
             </p>
+
             <p th:if="${(selectedArea == null or selectedArea.isBlank())
                        and (selectedIngredient == null or selectedIngredient.isBlank())}">
                 No recipes available right now. Please try again later.
@@ -108,6 +154,7 @@
 
                 <div class="discover-info">
                     <h3 th:text="${meal.get('strMeal').asText()}"></h3>
+
                     <p th:if="${selectedArea != null and !selectedArea.isBlank()
                             and selectedIngredient != null and !selectedIngredient.isBlank()}">
                         <span th:text="${selectedArea}"></span>
@@ -130,20 +177,23 @@
                         Random pick
                     </p>
                 </div>
-
             </a>
         </div>
     </section>
 
-    <!-- Recommended Dishes -->
-    <section>
-        <h2>Recommended Dishes</h2>
+    <!-- Recommended Recipes -->
+    <section class="content-section">
+        <div class="section-heading">
+            <div>
+                <p class="section-eyebrow">HANDPICKED FOR YOU</p>
+                <h2>Recommended Recipes</h2>
+                <p class="section-description">
+                    Find something delicious to cook today.
+                </p>
+            </div>
+        </div>
 
-        <p class="section-description">
-            Find something delicious to cook today.
-        </p>
-
-        <div class="recipe-list">
+        <div class="recipe-list recommended-grid">
             <a th:each="meal : ${recommendedRecipes}"
                th:href="@{/recipe-detail(id=${meal.get('idMeal').asText()})}"
                class="recipe-item">
@@ -157,49 +207,70 @@
     </section>
 
     <!-- Community Recipes -->
-    <section>
-        <h2>Community Recipes</h2>
-
-        <p class="section-description">
-            Recipes shared by the YumYum community.
-        </p>
+    <section class="content-section">
+        <div class="section-heading">
+            <div>
+                <p class="section-eyebrow">MADE BY OUR COMMUNITY</p>
+                <h2>Community Recipes</h2>
+                <p class="section-description">
+                    Recipes shared by the YumYum community.
+                </p>
+            </div>
+        </div>
 
         <div class="empty-state"
              th:if="${#lists.isEmpty(communityRecipes)}">
             No community recipes yet.
         </div>
 
-        <div class="recipe-list">
-            <div class="recipe-item"
+        <div class="recipe-list community-grid">
+            <div class="community-card"
                  th:each="post : ${communityRecipes}">
 
-                <a th:href="@{/post-detail(id=${post.id})}">
+                <a th:href="@{/post-detail(id=${post.id})}"
+                   class="community-card-link">
 
                     <img th:if="${post.imageUrl != null and !post.imageUrl.isEmpty()}"
                          th:src="${post.imageUrl}"
-                         th:alt="${post.title}">
+                         th:alt="${post.title}"
+                         class="community-image">
 
-                    <h3 th:text="${post.title}"></h3>
+                    <div th:unless="${post.imageUrl != null and !post.imageUrl.isEmpty()}"
+                         class="community-image-placeholder">
+                        <span>YumYum</span>
+                    </div>
+
+                    <div class="community-card-content">
+                        <h3 th:text="${post.title}"></h3>
+
+                        <p class="community-author" th:if="${post.user != null}">
+                            By <span th:text="${post.user.username}"></span>
+                        </p>
+                    </div>
                 </a>
 
                 <p class="rating"
                    th:if="${ratingMap[post.id] != null}">
-                    ⭐
+                    <span class="rating-star">★</span>
                     <span th:text="${#numbers.formatDecimal(ratingMap[post.id].averageRating, 1, 1)}"></span>
-                    ·
-                    <span th:text="${ratingMap[post.id].reviewCount}"></span>
-                    reviews
+                    <span class="rating-count">
+                        · <span th:text="${ratingMap[post.id].reviewCount}"></span> reviews
+                    </span>
                 </p>
 
                 <p class="rating"
                    th:unless="${ratingMap[post.id] != null}">
-                    ⭐ 0.0 · 0 reviews
+                    <span class="rating-star">★</span>
+                    0.0 <span class="rating-count">· 0 reviews</span>
                 </p>
             </div>
         </div>
     </section>
-
 </main>
+
+<footer>
+    <p>© 2026 YumYum. Made with love for food.</p>
+</footer>
 
 </body>
 </html>
