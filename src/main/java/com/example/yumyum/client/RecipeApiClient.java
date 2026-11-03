@@ -64,12 +64,16 @@ public class RecipeApiClient {
         while (recipes.size() < count && attempts < maxAttempts) {
             attempts++;
             JsonNode response = getRandomRecipe();
+            if (response == null) {
+                continue;
+            }
+
             JsonNode meal = response.path("meals").path(0);
 
-            if (!meal.isMissingNode()) {
+            if (meal.isObject()) {
                 String id = meal.path("idMeal").asText();
 
-                if (recipeIds.add(id)) {
+                if (!id.isBlank() && recipeIds.add(id)) {
                     recipes.add(meal);
                 }
             }

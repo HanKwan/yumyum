@@ -1,6 +1,5 @@
 package com.example.yumyum.controller;
 
-import com.example.yumyum.client.RecipeApiClient;
 import com.example.yumyum.config.DiscoverCombinationConfig;
 import com.example.yumyum.dto.DiscoverRecipesResponse;
 import com.example.yumyum.dto.RatingSummary;
@@ -27,7 +26,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -41,7 +39,6 @@ public class PageController {
     private final ReviewRepository reviewRepository;
     private final ExternalRecipeService externalRecipeService;
     private final DiscoverCombinationConfig discoverCombinationConfig;
-    private final RecipeApiClient recipeApiClient;
 
     @Value("${app.upload.dir}")
     private String uploadDir;
@@ -50,14 +47,12 @@ public class PageController {
                           UserRepository userRepository,
                           ReviewRepository reviewRepository,
                           ExternalRecipeService externalRecipeService,
-                          DiscoverCombinationConfig discoverCombinationConfig,
-                          RecipeApiClient recipeApiClient) {
+                          DiscoverCombinationConfig discoverCombinationConfig) {
         this.postRepository = postRepository;
         this.userRepository = userRepository;
         this.reviewRepository = reviewRepository;
         this.externalRecipeService = externalRecipeService;
         this.discoverCombinationConfig = discoverCombinationConfig;
-        this.recipeApiClient = recipeApiClient;
     }
 
     @GetMapping("/")
@@ -98,22 +93,10 @@ public class PageController {
 
         List<String> areas = externalRecipeService.getAvailableAreas();
 
-        JsonNode allAreasResponse = recipeApiClient.getAllAreas();
-        System.out.println("Raw API areas: " + allAreasResponse.path("meals"));
-
-        JsonNode ingredientsResponse = recipeApiClient.getAllIngredients();
-        List<String> ingredients = new ArrayList<>();
-
-        for (JsonNode ingredientNode : ingredientsResponse.path("meals")) {
-            ingredients.add(ingredientNode.path("strIngredient").asText());
-        }
+        List<String> ingredients = externalRecipeService.getAvailableIngredients();
 
         model.addAttribute("discoverAreas", areas);
         model.addAttribute("discoverIngredients", ingredients);
-
-        System.out.println("Areas sent to homepage: " + areas.size());
-        System.out.println("Ingredients sent to homepage: " + ingredients.size());
-        System.out.println("Ingredients: " + ingredients);
 
         model.addAttribute("selectedArea", area);
         model.addAttribute("selectedIngredient", ingredient);
