@@ -1,9 +1,12 @@
 package com.example.yumyum.controller;
 
+import com.example.yumyum.client.RecipeApiClient;
+import com.example.yumyum.config.DiscoverCombinationConfig;
 import com.example.yumyum.dto.RatingSummary;
 import com.example.yumyum.entity.Review;
 import com.example.yumyum.repository.PostRepository;
 import com.example.yumyum.repository.ReviewRepository;
+import com.example.yumyum.service.ExternalRecipeService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -15,12 +18,14 @@ import com.example.yumyum.repository.UserRepository;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import tools.jackson.databind.JsonNode;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -32,16 +37,79 @@ public class PageController {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
     private final ReviewRepository reviewRepository;
+    private final ExternalRecipeService externalRecipeService;
+    private final DiscoverCombinationConfig discoverCombinationConfig;
+    private final RecipeApiClient recipeApiClient;
 
     @Value("${app.upload.dir}")
     private String uploadDir;
 
     public PageController(PostRepository postRepository,
                           UserRepository userRepository,
-                          ReviewRepository reviewRepository) {
+                          ReviewRepository reviewRepository,
+                          ExternalRecipeService externalRecipeService,
+                          DiscoverCombinationConfig discoverCombinationConfig,
+                          RecipeApiClient recipeApiClient) {
         this.postRepository = postRepository;
         this.userRepository = userRepository;
         this.reviewRepository = reviewRepository;
+        this.externalRecipeService = externalRecipeService;
+        this.discoverCombinationConfig = discoverCombinationConfig;
+        this.recipeApiClient = recipeApiClient;
+    }
+
+    @GetMapping("/")
+    public String home(
+            @RequestParam(required = false) String area,
+            @RequestParam(required = false) String ingredient,
+            Model model) {
+
+        model.addAttribute(
+                "discoverData",
+                externalRecipeService.getDiscoverRecipes(area, ingredient)
+        );
+
+        model.addAttribute(
+                "recommendedRecipes",
+                externalRecipeService.getRecommendedRecipes()
+        );
+
+        List<Post> communityRecipes = postRepository.findRandomPosts(3);
+
+        List<RatingSummary> summaries = reviewRepository.findRatingSummaries();
+
+        Map<Long, RatingSummary> ratingMap = summaries.stream()
+                .collect(Collectors.toMap(
+                        RatingSummary::getPostId,
+                        summary -> summary
+                ));
+
+        model.addAttribute("communityRecipes", communityRecipes);
+        model.addAttribute("ratingMap", ratingMap);
+
+        List<String> areas = externalRecipeService.getAvailableAreas();
+
+        JsonNode allAreasResponse = recipeApiClient.getAllAreas();
+        System.out.println("Raw API areas: " + allAreasResponse.path("meals"));
+
+        JsonNode ingredientsResponse = recipeApiClient.getAllIngredients();
+        List<String> ingredients = new ArrayList<>();
+
+        for (JsonNode ingredientNode : ingredientsResponse.path("meals")) {
+            ingredients.add(ingredientNode.path("strIngredient").asText());
+        }
+
+        model.addAttribute("discoverAreas", areas);
+        model.addAttribute("discoverIngredients", ingredients);
+
+        System.out.println("Areas sent to homepage: " + areas.size());
+        System.out.println("Ingredients sent to homepage: " + ingredients.size());
+        System.out.println("Ingredients: " + ingredients);
+
+        model.addAttribute("selectedArea", area);
+        model.addAttribute("selectedIngredient", ingredient);
+
+        return "home";
     }
 
     @GetMapping("/posts")
@@ -196,7 +264,6 @@ public class PageController {
 
         return "edit-post";
     }
-
 
     @PostMapping("/posts/edit")
     public String updatePost(

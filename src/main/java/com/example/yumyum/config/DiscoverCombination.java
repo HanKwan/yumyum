@@ -1,4 +1,7 @@
 package com.example.yumyum.config;
 
-public class DiscoverCombination {
+public record DiscoverCombination(
+        String area,
+        String ingredient
+) {
 }

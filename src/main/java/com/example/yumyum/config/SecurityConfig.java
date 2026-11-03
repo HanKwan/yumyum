@@ -61,6 +61,8 @@ public class SecurityConfig {
                                 "/profile/edit"
                         ).authenticated()
                         .requestMatchers(
+                                "/",
+                                "/home.css",
                                 "/login",
                                 "/api/auth/register",
                                 "/api/auth/login",

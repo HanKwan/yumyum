@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>YumYum</title>
+    <link rel="stylesheet" th:href="@{/home.css}">
+</head>
+<body>
+
+<header>
+    <h1>YumYum</h1>
+    <p>Discover recipes and share your cooking.</p>
+</header>
+
+<main>
+    <!-- Discover Recipes -->
+    <section>
+        <h2>Discover Recipes</h2>
+
+        <form th:action="@{/}" method="get">
+            <div class="discover-filters">
+                <div>
+                    <label for="discoverArea">Area</label>
+                    <select id="discoverArea" name="area">
+                        <option value="">Any Areas</option>
+                        <option th:each="area : ${discoverAreas}"
+                                th:value="${area}"
+                                th:text="${area}"
+                                th:selected="${area == selectedArea}">
+                        </option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="discoverIngredient">Ingredient</label>
+                    <select id="discoverIngredient" name="ingredient">
+                        <option value="">Any Ingredients</option>
+                        <option th:each="ingredient : ${discoverIngredients}"
+                                th:value="${ingredient}"
+                                th:text="${ingredient}"
+                                th:selected="${ingredient == selectedIngredient}">
+                        </option>
+                    </select>
+                </div>
+            </div>
+
+            <button type="submit">Discover</button>
+        </form>
+
+        <p class="section-description"
+           th:if="${selectedArea != null and !selectedArea.isBlank()
+           and selectedIngredient != null and !selectedIngredient.isBlank()}">
+            Explore recipes using
+            <strong th:text="${selectedArea}"></strong>
+            and
+            <strong th:text="${selectedIngredient}"></strong>
+        </p>
+
+        <p class="section-description"
+           th:if="${selectedArea != null and !selectedArea.isBlank()
+           and (selectedIngredient == null or selectedIngredient.isBlank())}">
+            Explore recipes from
+            <strong th:text="${selectedArea}"></strong>
+        </p>
+
+        <p class="section-description"
+           th:if="${selectedIngredient != null and !selectedIngredient.isBlank()
+           and (selectedArea == null or selectedArea.isBlank())}">
+            Explore recipes with
+            <strong th:text="${selectedIngredient}"></strong>
+        </p>
+
+        <p class="section-description"
+           th:if="${(selectedArea == null or selectedArea.isBlank())
+           and (selectedIngredient == null or selectedIngredient.isBlank())}">
+            Here's a random selection of recipes for you.
+        </p>
+
+        <div class="empty-state"
+             th:if="${#lists.isEmpty(discoverData.recipeName)}">
+
+            <span th:if="${selectedArea != null and !selectedArea.isBlank()
+                          and selectedIngredient != null and !selectedIngredient.isBlank()}">
+                No recipes found for this area and ingredient combination.
+            </span>
+
+                    <span th:unless="${selectedArea != null and !selectedArea.isBlank()
+                              and selectedIngredient != null and !selectedIngredient.isBlank()}">
+                No recipes found. Try different filters.
+            </span>
+        </div>
+
+        <div class="discover-grid">
+            <div class="discover-item"
+                 th:each="meal : ${discoverData.recipeName}">
+
+                <img th:src="${meal.get('strMealThumb').asText()}"
+                     th:alt="${meal.get('strMeal').asText()}">
+
+                <div class="discover-info">
+                    <h3 th:text="${meal.get('strMeal').asText()}"></h3>
+                    <p th:if="${selectedArea != null and !selectedArea.isBlank()
+                            and selectedIngredient != null and !selectedIngredient.isBlank()}">
+                        <span th:text="${selectedArea}"></span>
+                        ·
+                        <span th:text="${selectedIngredient}"></span>
+                    </p>
+
+                    <p th:if="${selectedArea != null and !selectedArea.isBlank()
+                            and (selectedIngredient == null or selectedIngredient.isBlank())}">
+                        <span th:text="${selectedArea}"></span>
+                    </p>
+
+                    <p th:if="${selectedIngredient != null and !selectedIngredient.isBlank()
+                            and (selectedArea == null or selectedArea.isBlank())}">
+                        <span th:text="${selectedIngredient}"></span>
+                    </p>
+
+                    <p th:if="${(selectedArea == null or selectedArea.isBlank())
+                            and (selectedIngredient == null or selectedIngredient.isBlank())}">
+                        Random pick
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Recommended Dishes -->
+    <section>
+        <h2>Recommended Dishes</h2>
+
+        <p class="section-description">
+            Find something delicious to cook today.
+        </p>
+
+        <div class="recipe-list">
+            <div class="recipe-item"
+                 th:each="meal : ${recommendedRecipes}">
+
+                <img th:src="${meal.get('strMealThumb').asText()}"
+                     th:alt="${meal.get('strMeal').asText()}">
+
+                <h3 th:text="${meal.get('strMeal').asText()}"></h3>
+            </div>
+        </div>
+    </section>
+
+    <!-- Community Recipes -->
+    <section>
+        <h2>Community Recipes</h2>
+
+        <p class="section-description">
+            Recipes shared by the YumYum community.
+        </p>
+
+        <div class="empty-state"
+             th:if="${#lists.isEmpty(communityRecipes)}">
+            No community recipes yet.
+        </div>
+
+        <div class="recipe-list">
+            <div class="recipe-item"
+                 th:each="post : ${communityRecipes}">
+
+                <a th:href="@{/post-detail(id=${post.id})}">
+
+                    <img th:if="${post.imageUrl != null and !post.imageUrl.isEmpty()}"
+                         th:src="${post.imageUrl}"
+                         th:alt="${post.title}">
+
+                    <h3 th:text="${post.title}"></h3>
+                </a>
+
+                <p class="rating"
+                   th:if="${ratingMap[post.id] != null}">
+                    ⭐
+                    <span th:text="${#numbers.formatDecimal(ratingMap[post.id].averageRating, 1, 1)}"></span>
+                    ·
+                    <span th:text="${ratingMap[post.id].reviewCount}"></span>
+                    reviews
+                </p>
+
+                <p class="rating"
+                   th:unless="${ratingMap[post.id] != null}">
+                    ⭐ 0.0 · 0 reviews
+                </p>
+            </div>
+        </div>
+    </section>
+
+</main>
+
+</body>
+</html>

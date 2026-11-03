@@ -1,0 +1,271 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    color: #302e2b;
+    background: #faf8f4;
+}
+
+/* Header */
+header {
+    padding: 24px 6%;
+    background: #fff;
+    border-bottom: 1px solid #eee9e1;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 28px;
+    color: #d66b3d;
+}
+
+header p {
+    margin: 6px 0 0;
+    color: #77716a;
+    font-size: 14px;
+}
+
+/* Main Content */
+main {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 30px 6%;
+}
+
+section {
+    margin-bottom: 45px;
+}
+
+section h2 {
+    font-size: 23px;
+    margin: 0 0 8px;
+}
+
+.section-description {
+    color: #817b73;
+    font-size: 14px;
+    margin: 0 0 18px;
+    line-height: 1.5;
+}
+
+/* Recipe Carousel */
+.recipe-list {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    padding: 5px 2px 14px;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: thin;
+    scrollbar-color: #d8cfc4 #f0ece6;
+}
+
+.recipe-item {
+    flex: 0 0 160px;
+    width: 160px;
+    min-width: 0;
+    background: #fff;
+    border: 1px solid #eee9e1;
+    border-radius: 11px;
+    overflow: hidden;
+    scroll-snap-align: start;
+}
+
+/* Recipe Images */
+.recipe-item img {
+    width: 100%;
+    height: 115px;
+    object-fit: cover;
+    display: block;
+}
+
+/* Recipe Titles */
+.recipe-item h3 {
+    font-size: 14px;
+    line-height: 1.4;
+    margin: 10px;
+    font-weight: 600;
+}
+
+.recipe-item a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.recipe-item a:hover h3 {
+    color: #d66b3d;
+}
+
+/* Ratings */
+.rating {
+    font-size: 12px;
+    color: #817b73;
+    margin: 0 10px 12px;
+}
+
+/* Empty State */
+.empty-state {
+    padding: 20px;
+    background: #fff;
+    border: 1px dashed #e5d9cc;
+    border-radius: 10px;
+    color: #817b73;
+    font-size: 14px;
+}
+
+.discover-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.discover-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    min-width: 0;
+    padding: 10px;
+    background: #fff;
+    border: 1px solid #eee9e1;
+    border-radius: 12px;
+}
+
+.discover-item img {
+    width: 105px;
+    height: 90px;
+    flex-shrink: 0;
+    object-fit: cover;
+    border-radius: 9px;
+}
+
+.discover-info {
+    min-width: 0;
+}
+
+.discover-info h3 {
+    font-size: 14px;
+    line-height: 1.4;
+    margin: 0 0 7px;
+}
+
+.discover-info p {
+    font-size: 12px;
+    color: #817b73;
+    margin: 0;
+}
+
+/* Mobile: one recipe per row */
+@media (max-width: 600px) {
+    .discover-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .discover-item img {
+        width: 95px;
+        height: 80px;
+    }
+}
+
+/* Scrollbar */
+
+.recipe-list::-webkit-scrollbar {
+    height: 5px;
+}
+
+.recipe-list::-webkit-scrollbar-thumb {
+    background: #d8cfc4;
+    border-radius: 10px;
+}
+
+.recipe-list::-webkit-scrollbar-track {
+    background: #f0ece6;
+}
+
+/*table*/
+@media (max-width: 768px) {
+
+    header {
+        padding: 22px 5%;
+    }
+
+    main {
+        padding: 25px 5%;
+    }
+
+    section {
+        margin-bottom: 38px;
+    }
+
+    section h2 {
+        font-size: 21px;
+    }
+
+    .recipe-list {
+        gap: 13px;
+    }
+
+    .recipe-item {
+        flex-basis: 145px;
+        width: 145px;
+    }
+
+    .recipe-item img {
+        height: 105px;
+    }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+
+    header {
+        padding: 20px 16px;
+    }
+
+    header h1 {
+        font-size: 25px;
+    }
+
+    main {
+        padding: 22px 16px;
+    }
+
+    section {
+        margin-bottom: 32px;
+    }
+
+    section h2 {
+        font-size: 19px;
+    }
+
+    .section-description {
+        font-size: 13px;
+    }
+
+    .recipe-list {
+        gap: 12px;
+    }
+
+    .recipe-item {
+        flex-basis: 135px;
+        width: 135px;
+        border-radius: 10px;
+    }
+
+    .recipe-item img {
+        height: 95px;
+    }
+
+    .recipe-item h3 {
+        font-size: 13px;
+        margin: 9px;
+    }
+
+    .rating {
+        font-size: 11px;
+        margin: 0 9px 10px;
+    }
+}
