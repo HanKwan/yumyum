@@ -1,6 +1,7 @@
 package com.example.yumyum.controller;
 
 import com.example.yumyum.dto.LoginRequest;
+import com.example.yumyum.dto.RegisterRequest;
 import com.example.yumyum.entity.User;
 import com.example.yumyum.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
@@ -42,13 +43,16 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@Valid @RequestBody User user) {
-        if (userRepository.existsByEmail(user.getEmail())) {
+    public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest request) {
+        if (userRepository.existsByEmail(request.email())) {
             return ResponseEntity.status(HttpStatus.CONFLICT)
                     .body(Map.of("error", "Email is already registered"));
         }
 
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        User user = new User();
+        user.setUsername(request.username());
+        user.setEmail(request.email());
+        user.setPassword(passwordEncoder.encode(request.password()));
         User savedUser = userRepository.save(user);
 
         return ResponseEntity.status(HttpStatus.CREATED)

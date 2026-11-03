@@ -1,13 +1,12 @@
 package com.example.yumyum.controller;
 
-import com.example.yumyum.entity.User;
+import com.example.yumyum.dto.UserResponse;
 import com.example.yumyum.repository.UserRepository;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 public class UserController {
@@ -18,12 +17,14 @@ public class UserController {
     }
 
     @GetMapping("/api/users")
-    public List<User> getUsers() {
-        return userRepository.findAll();
-    }
-
-    @PostMapping("/api/users")
-    public User createUser(@RequestBody User user) {
-        return userRepository.save(user);
+    public List<UserResponse> getUsers() {
+        return userRepository.findAll().stream()
+                .map(user -> new UserResponse(
+                        user.getId(),
+                        user.getUsername(),
+                        user.getBio(),
+                        user.getProfileImage()
+                ))
+                .collect(Collectors.toList());
     }
 }
