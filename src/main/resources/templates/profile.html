@@ -1,75 +1,142 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <meta charset="UTF-8">
-        <title>User Profile</title>
-    </head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <body>
-        <h1>User Profile</h1>
+    <title>User Profile | YumYum</title>
 
-        <div>
-            <p>Profile picture not uploaded</p>
+    <link rel="stylesheet" th:href="@{/profile.css}">
+    <link rel="stylesheet" th:href="@{/navbar.css}">
+    <link rel="stylesheet" th:href="@{/footer.css}">
+</head>
 
-            <img th:src="${user.profileImage}"
-                 alt="Profile Picture"
-                 width="120"
-                 height="120">
+<body>
+    <!-- Shared Navbar -->
+    <div th:replace="~{fragments/navbar :: navbar('profile')}"></div>
 
-            <h2 th:text="${user.username}">Username</h2>
+    <main class="profile-container">
 
-            <p th:if="${user.bio != null and !user.bio.isEmpty()}"
-               th:text="${user.bio}">
-                User bio
-            </p>
+        <!-- Profile Header -->
+        <section class="profile-header">
 
-            <p th:if="${user.bio == null or user.bio.isEmpty()}">
-                No bio yet.
-            </p>
+            <div class="photo-container">
+                <img th:if="${user.profileImage != null and !user.profileImage.isEmpty()}"
+                     th:src="${user.profileImage}"
+                     alt="Profile Picture"
+                     class="profile-photo">
 
-            <div th:if="${currentUserEmail != null and currentUserEmail == user.email}">
-                <a th:href="@{/profile/edit}">Edit Profile</a>
-            </div>
-        </div>
+                <img th:unless="${user.profileImage != null and !user.profileImage.isEmpty()}"
+                     th:src="@{/images/default-profile.png}"
+                     alt="Default Profile Picture"
+                     class="profile-photo">
 
-        <hr>
-
-        <h2>Recipes</h2>
-
-        <div th:if="${#lists.isEmpty(posts)}">
-            <p>This user hasn't posted any recipes yet.</p>
-        </div>
-
-        <div th:each="post : ${posts}">
-            <h3>
-                <a th:href="@{/post-detail(id=${post.id})}"
-                   th:text="${post.title}">
-                    Recipe title
+                <a th:if="${currentUserEmail != null and currentUserEmail == user.email}"
+                   th:href="@{/profile/edit}"
+                   class="photo-edit-button">
+                    +
                 </a>
-            </h3>
-
-            <p th:text="${post.description}">Recipe description</p>
-
-            <div class="post-rating">
-                <span>★</span>
-
-                <span th:if="${ratingMap.containsKey(post.id)}"
-                      th:text="${#numbers.formatDecimal(ratingMap.get(post.id).averageRating, 1, 1)}">
-                    0.0
-                </span>
-
-                <span th:unless="${ratingMap.containsKey(post.id)}">
-                    0.0
-                </span>
-
-                <span th:if="${ratingMap.containsKey(post.id)}"
-                      th:text="|(${ratingMap.get(post.id).reviewCount} reviews)|">
-                </span>
-
-                <span th:unless="${ratingMap.containsKey(post.id)}">
-                    (0 reviews)
-                </span>
             </div>
-        </div>
-    </body>
+
+            <div class="profile-info">
+                <h1 th:text="${user.username}">Username</h1>
+
+                <p th:if="${user.bio != null and !user.bio.isEmpty()}"
+                   th:text="${user.bio}">
+                    User bio
+                </p>
+
+                <p th:unless="${user.bio != null and !user.bio.isEmpty()}"
+                   class="empty-bio">
+                    No bio yet.
+                </p>
+
+                <div class="stats">
+                    <div class="stat-item">
+                        <strong th:text="${#lists.size(posts)}">0</strong>
+                        <span>Posts</span>
+                    </div>
+
+                </div>
+
+                <div th:if="${currentUserEmail != null and currentUserEmail == user.email}">
+                    <a th:href="@{/profile/edit}" class="edit-button">
+                        ✏️ Edit Profile
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- User Recipes -->
+        <section class="my-recipes">
+            <div class="section-title">
+                <div>
+                    <h2>My Recipe Posts</h2>
+                    <p>My kitchen creations</p>
+                </div>
+            </div>
+
+            <div class="recipe-grid">
+                <!-- Empty State -->
+                <div class="empty-message"
+                     th:if="${#lists.isEmpty(posts)}">
+                    <p>This user hasn't posted any recipes yet.</p>
+                </div>
+
+                <!-- Recipe Cards -->
+                <article class="recipe-card"
+                         th:each="post : ${posts}">
+
+                    <a th:href="@{/post-detail(id=${post.id})}"
+                       class="recipe-card-link">
+
+                        <img th:if="${post.imageUrl != null and !post.imageUrl.isEmpty()}"
+                             th:src="${post.imageUrl}"
+                             th:alt="${post.title}"
+                             class="recipe-image">
+
+                        <div th:unless="${post.imageUrl != null and !post.imageUrl.isEmpty()}"
+                             class="recipe-image-placeholder">
+                            <span>YumYum</span>
+                        </div>
+
+                        <div class="recipe-content">
+
+                            <h3 th:text="${post.title}">
+                                Recipe title
+                            </h3>
+
+                            <p th:text="${post.description}">
+                                Recipe description
+                            </p>
+
+                            <div class="post-rating">
+                                <span>★</span>
+                                <span th:if="${ratingMap.containsKey(post.id)}"
+                                      th:text="${#numbers.formatDecimal(ratingMap.get(post.id).averageRating, 1, 1)}">
+                                        0.0
+                                </span>
+
+                                <span th:unless="${ratingMap.containsKey(post.id)}">
+                                        0.0
+                                </span>
+
+                                <span th:if="${ratingMap.containsKey(post.id)}"
+                                      th:text="|(${ratingMap.get(post.id).reviewCount} reviews)|">
+                                </span>
+
+                                <span th:unless="${ratingMap.containsKey(post.id)}">
+                                        (0 reviews)
+                                </span>
+                            </div>
+                        </div>
+                    </a>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <div th:replace="~{fragments/footer :: footer}"></div>
+
+</body>
 </html>

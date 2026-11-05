@@ -1,0 +1,354 @@
+:root {
+    --cream: #f8f1e7;
+    --white: #fff8e9;
+    --green: #456b60;
+    --green-dark: #34564c;
+    --coral: #ed8068;
+    --brown: #54351f;
+    --muted: #817b73;
+    --border: #e9dfd1;
+    --light-green: #e7eee8;
+    --rating: #f4c6a9;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,
+body {
+    min-height: 100%;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+
+    font-family: Arial, Helvetica, sans-serif;
+    background: var(--cream);
+    color: var(--brown);
+}
+
+/* Profile Container */
+.profile-container {
+    flex: 1;
+    width: 100%;
+    max-width: 1050px;
+    margin: 45px auto;
+    padding: 0 25px;
+}
+
+/* Profile Header */
+.profile-header {
+    background: var(--green);
+    border: 1px solid var(--green-dark);
+    border-radius: 18px;
+    padding: 40px;
+
+    display: flex;
+    align-items: center;
+    gap: 55px;
+
+    box-shadow: 0 4px 20px rgba(52, 86, 76, 0.10);
+}
+
+/* Profile Picture */
+.photo-container {
+    position: relative;
+    flex-shrink: 0;
+}
+
+.photo-edit-button {
+    position: absolute;
+    bottom: 5px;
+    right: -8px;
+
+    width: 45px;
+    height: 45px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: var(--coral);
+    color: white;
+    border: 4px solid var(--green);
+    border-radius: 50%;
+
+    font-size: 30px;
+    font-weight: bold;
+    text-decoration: none;
+
+    transition: 0.2s ease;
+}
+
+.photo-edit-button:hover {
+    background: #d95f50;
+    transform: scale(1.1);
+}
+
+.profile-photo {
+    display: block;
+    width: 170px;
+    height: 170px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 5px solid rgba(255, 248, 233, 0.8);
+    background: var(--light-green);
+}
+
+/* Profile Information */
+.profile-info {
+    flex: 1;
+}
+
+.profile-info h1 {
+    font-family: Georgia, serif;
+    font-size: 30px;
+    margin-bottom: 10px;
+    color: var(--white);
+}
+
+.profile-info > p {
+    color: #dce9df;
+    font-size: 15px;
+    line-height: 1.7;
+    margin-bottom: 22px;
+}
+
+.profile-info .empty-bio {
+    color: rgba(220, 233, 223, 0.7);
+    font-style: italic;
+}
+
+/* Stats */
+.stats {
+    display: flex;
+    gap: 45px;
+    margin-bottom: 25px;
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.stat-item strong {
+    font-size: 25px;
+    color: var(--white);
+}
+
+.stat-item span {
+    color: #dce9df;
+    font-size: 14px;
+}
+
+/* Edit Profile Button */
+.edit-button {
+    display: inline-block;
+    padding: 11px 22px;
+    border-radius: 8px;
+
+    background: var(--white);
+    color: var(--green-dark);
+
+    font-size: 14px;
+    font-weight: bold;
+    text-decoration: none;
+
+    transition: 0.2s ease;
+}
+
+.edit-button:hover {
+    background: var(--coral);
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* My Recipes */
+.my-recipes {
+    margin-top: 45px;
+}
+
+.section-title {
+    margin-bottom: 25px;
+}
+
+.section-title h2 {
+    font-family: Georgia, serif;
+    font-size: 28px;
+    margin-bottom: 8px;
+    color: var(--brown);
+}
+
+.section-title p {
+    color: var(--muted);
+    font-size: 14px;
+}
+
+/* Recipe Grid */
+.recipe-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 25px;
+}
+
+/* Recipe Cards */
+.recipe-card {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+
+    background: var(--green);
+    border: 1px solid var(--green-dark);
+    border-radius: 15px;
+
+    box-shadow: 0 4px 15px rgba(52, 86, 76, 0.08);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.recipe-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(52, 86, 76, 0.2);
+}
+
+.recipe-card-link {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    color: inherit;
+    text-decoration: none;
+}
+
+/* Recipe Images */
+.recipe-image {
+    display: block;
+    width: 100%;
+    height: 210px;
+    object-fit: cover;
+}
+
+.recipe-image-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 210px;
+
+    background: var(--light-green);
+    color: var(--green);
+
+    font-family: Georgia, serif;
+    font-size: 22px;
+}
+
+/* Recipe Content */
+.recipe-content {
+    padding: 17px;
+}
+
+.recipe-content h3 {
+    font-family: Georgia, serif;
+    font-size: 18px;
+    margin-bottom: 8px;
+    color: var(--white);
+}
+
+.recipe-content p {
+    color: #dce9df;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+/* Rating */
+.post-rating {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 10px;
+
+    color: var(--white);
+    font-size: 13px;
+}
+
+.post-rating span:first-child {
+    color: var(--coral);
+    font-size: 17px;
+}
+
+.post-rating span:last-child {
+    color: #dce9df;
+    font-size: 12px;
+}
+
+/* Empty State */
+.empty-message {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 50px 20px;
+
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 15px;
+
+    color: var(--muted);
+}
+
+/* Tablet */
+@media (max-width: 760px) {
+    .profile-container {
+        margin: 30px auto;
+        padding: 0 18px;
+    }
+
+    .profile-header {
+        gap: 30px;
+        padding: 30px;
+    }
+
+    .profile-photo {
+        width: 140px;
+        height: 140px;
+    }
+
+    .recipe-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 15px;
+    }
+
+    .recipe-image,
+    .recipe-image-placeholder {
+        height: 160px;
+    }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+    .profile-header {
+        flex-direction: column;
+        text-align: center;
+        gap: 22px;
+        padding: 28px 20px;
+    }
+
+    .profile-info h1 {
+        font-size: 25px;
+    }
+
+    .stats {
+        justify-content: center;
+    }
+
+    .recipe-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .recipe-image,
+    .recipe-image-placeholder {
+        height: 220px;
+    }
+}

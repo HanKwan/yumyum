@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Create Account | YumYum</title>
+
+    <link rel="stylesheet" th:href="@{/register.css}">
+</head>
+
+<body>
+    <main class="register-container">
+
+        <div class="icon">🍳</div>
+
+        <h1>Create Account</h1>
+
+        <p class="subtitle">
+            Join YumYum and share your favorite recipes!
+        </p>
+
+        <form id="registerForm" novalidate>
+            <div class="input-group">
+                <input type="text" id="username"
+                       placeholder="Username" required>
+                <small class="field-error" id="usernameError"></small>
+            </div>
+
+            <div class="input-group">
+                <input type="email" id="email"
+                       placeholder="Email Address" required>
+                <small class="field-error" id="emailError"></small>
+            </div>
+
+            <div class="input-group">
+                <input type="password" id="password"
+                       placeholder="Password (at least 8 characters)"
+                       minlength="8" required>
+                <small class="field-error" id="passwordError"></small>
+            </div>
+
+            <div class="input-group">
+                <input type="password" id="confirmPassword"
+                       placeholder="Confirm Password"
+                       minlength="8" required>
+                <small class="field-error" id="confirmPasswordError"></small>
+            </div>
+
+            <button type="submit" class="register-button">
+                Create Account
+            </button>
+        </form>
+
+        <p class="message" id="message"></p>
+
+        <p class="login-text">
+            Already have an account?
+            <a th:href="@{/login}">Login</a>
+        </p>
+    </main>
+
+    <script>
+        const registerForm = document.getElementById("registerForm");
+        const message = document.getElementById("message");
+
+        const usernameInput = document.getElementById("username");
+        const emailInput = document.getElementById("email");
+        const passwordInput = document.getElementById("password");
+        const confirmPasswordInput = document.getElementById("confirmPassword");
+
+        function showError(input, errorId, text) {
+            input.classList.add("input-error");
+            document.getElementById(errorId).textContent = text;
+        }
+
+        function clearError(input, errorId) {
+            input.classList.remove("input-error");
+            document.getElementById(errorId).textContent = "";
+        }
+
+        // Clear errors when the user corrects a field
+        usernameInput.addEventListener("input", () => {
+            clearError(usernameInput, "usernameError");
+        });
+
+        emailInput.addEventListener("input", () => {
+            clearError(emailInput, "emailError");
+        });
+
+        passwordInput.addEventListener("input", () => {
+            clearError(passwordInput, "passwordError");
+
+            if (passwordInput.value === confirmPasswordInput.value) {
+                clearError(confirmPasswordInput, "confirmPasswordError");
+            }
+        });
+
+        confirmPasswordInput.addEventListener("input", () => {
+            clearError(confirmPasswordInput, "confirmPasswordError");
+        });
+
+        registerForm.addEventListener("submit", async (event) => {
+            event.preventDefault();
+
+            message.textContent = "";
+            message.className = "message";
+
+            // Clear previous errors
+            clearError(usernameInput, "usernameError");
+            clearError(emailInput, "emailError");
+            clearError(passwordInput, "passwordError");
+            clearError(confirmPasswordInput, "confirmPasswordError");
+
+            const username = usernameInput.value.trim();
+            const email = emailInput.value.trim();
+            const password = passwordInput.value;
+            const confirmPassword = confirmPasswordInput.value;
+
+            let hasError = false;
+
+            if (!username) {
+                showError(usernameInput, "usernameError", "Please enter a username.");
+                hasError = true;
+            }
+
+            if (!email) {
+                showError(emailInput, "emailError", "Please enter your email.");
+                hasError = true;
+            } else if (emailInput.validity.typeMismatch) {
+                showError(emailInput, "emailError", "Please enter a valid email address.");
+                hasError = true;
+            }
+
+            if (!password) {
+                showError(passwordInput, "passwordError", "Please enter a password.");
+                hasError = true;
+            } else if (password.length < 8) {
+                showError(passwordInput, "passwordError", "Password must be at least 8 characters.");
+                hasError = true;
+            }
+
+            if (!confirmPassword) {
+                showError(confirmPasswordInput, "confirmPasswordError", "Please confirm your password.");
+                hasError = true;
+            } else if (password !== confirmPassword) {
+                showError(confirmPasswordInput, "confirmPasswordError", "Passwords do not match.");
+                hasError = true;
+            }
+
+            if (hasError) return;
+
+            try {
+                const response = await fetch("/api/auth/register", {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({ username, email, password })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    if (response.status === 409) {
+                        showError(emailInput, "emailError",
+                            data.error || "Email is already registered.");
+                    } else {
+                        message.textContent = data.error || "Registration failed.";
+                        message.classList.add("error");
+                    }
+                    return;
+                }
+
+                message.textContent = "Registration successful! Redirecting to home...";
+                message.classList.add("success");
+
+                setTimeout(() => {
+                    window.location.href = "/";
+                }, 1000);
+
+            } catch (error) {
+                message.textContent = "Could not connect to the server.";
+                message.classList.add("error");
+            }
+        });
+    </script>
+</body>
+</html>

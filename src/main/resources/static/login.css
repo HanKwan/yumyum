@@ -1,0 +1,152 @@
+:root {
+    --cream: #f8f1e7;
+    --white: #fff8e9;
+    --green: #456b60;
+    --green-dark: #34564c;
+    --coral: #ed8068;
+    --brown: #54351f;
+    --muted: #817b73;
+    --border: #e9dfd1;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+
+    font-family: Arial, Helvetica, sans-serif;
+    background: var(--cream);
+    color: var(--brown);
+}
+
+.login-container {
+    width: 380px;
+    max-width: 100%;
+    padding: 40px 35px;
+
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    text-align: center;
+
+    box-shadow: 0 5px 20px rgba(52, 86, 76, 0.10);
+}
+
+.icon {
+    font-size: 60px;
+    margin-bottom: 12px;
+}
+
+h1 {
+    font-family: Georgia, serif;
+    color: var(--green-dark);
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    color: var(--muted);
+    margin-bottom: 28px;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.input-group {
+    margin-bottom: 16px;
+}
+
+input {
+    width: 100%;
+    padding: 14px;
+
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: #fffdf8;
+
+    font-size: 14px;
+    color: var(--brown);
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+input::placeholder {
+    color: #aaa198;
+}
+
+input:focus {
+    border-color: var(--green);
+    box-shadow: 0 0 0 3px rgba(69, 107, 96, 0.12);
+}
+
+button {
+    width: 100%;
+    padding: 13px;
+
+    border: none;
+    border-radius: 10px;
+
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.login-button {
+    margin-top: 5px;
+    background: var(--green);
+    color: var(--white);
+}
+
+.login-button:hover {
+    background: var(--green-dark);
+    transform: translateY(-2px);
+}
+
+.message {
+    margin-top: 15px;
+    font-size: 13px;
+    min-height: 16px;
+}
+
+.message.error {
+    color: #d93025;
+}
+
+.message.success {
+    color: var(--green-dark);
+}
+
+.register-text {
+    margin-top: 22px;
+    font-size: 14px;
+    color: var(--muted);
+}
+
+.register-text a {
+    color: var(--green);
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.register-text a:hover {
+    color: var(--coral);
+    text-decoration: underline;
+}
+
+@media (max-width: 480px) {
+    .login-container {
+        padding: 32px 24px;
+    }
+
+    h1 {
+        font-size: 25px;
+    }
+}

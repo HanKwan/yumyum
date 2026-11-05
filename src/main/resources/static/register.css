@@ -1,0 +1,170 @@
+:root {
+    --cream: #f8f1e7;
+    --white: #fff8e9;
+    --green: #456b60;
+    --green-dark: #34564c;
+    --coral: #ed8068;
+    --brown: #54351f;
+    --muted: #817b73;
+    --border: #e9dfd1;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+
+    font-family: Arial, Helvetica, sans-serif;
+    background: var(--cream);
+    color: var(--brown);
+}
+
+.register-container {
+    width: 400px;
+    max-width: 100%;
+    padding: 35px;
+
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    text-align: center;
+
+    box-shadow: 0 5px 20px rgba(52, 86, 76, 0.10);
+}
+
+.icon {
+    font-size: 60px;
+    margin-bottom: 10px;
+}
+
+h1 {
+    font-family: Georgia, serif;
+    color: var(--green-dark);
+    margin-bottom: 10px;
+    font-size: 27px;
+}
+
+.subtitle {
+    color: var(--muted);
+    margin-bottom: 25px;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.input-group {
+    margin-bottom: 15px;
+}
+
+input {
+    width: 100%;
+    padding: 13px;
+
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: #fffdf8;
+
+    font-size: 14px;
+    color: var(--brown);
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+input::placeholder {
+    color: #aaa198;
+}
+
+input:focus {
+    border-color: var(--green);
+    box-shadow: 0 0 0 3px rgba(69, 107, 96, 0.12);
+}
+
+
+.field-error {
+    display: block;
+    color: #c34b3d;
+    font-size: 12px;
+    text-align: left;
+    margin-top: 6px;
+}
+
+.field-error:empty {
+    display: none;
+}
+
+.input-group input.input-error {
+    border: 1px solid #d45b50;
+    background: #fff8f6;
+}
+
+.input-group input.input-error:focus {
+    border-color: #d45b50;
+    box-shadow: 0 0 0 3px rgba(212, 91, 80, 0.12);
+}
+
+button {
+    width: 100%;
+    padding: 13px;
+
+    border: none;
+    border-radius: 10px;
+
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.register-button {
+    background: var(--green);
+    color: var(--white);
+    margin-top: 5px;
+}
+
+.register-button:hover {
+    background: var(--green-dark);
+    transform: translateY(-2px);
+}
+
+.message {
+    margin-top: 15px;
+    font-size: 13px;
+}
+
+.message.error {
+    color: #d93025;
+}
+
+.message.success {
+    color: var(--green-dark);
+}
+
+.login-text {
+    margin-top: 22px;
+    font-size: 14px;
+    color: var(--muted);
+}
+
+.login-text a {
+    color: var(--green);
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.login-text a:hover {
+    color: var(--coral);
+    text-decoration: underline;
+}
+
+@media (max-width: 480px) {
+    .register-container {
+        padding: 30px 24px;
+    }
+}

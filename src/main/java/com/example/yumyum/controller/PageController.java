@@ -234,6 +234,11 @@ public class PageController {
         return "login";
     }
 
+    @GetMapping("/register")
+    public String showRegisterPage() {
+        return "register";
+    }
+
     @GetMapping("/posts/edit")
     public String showEditPost(
             @RequestParam Long id,
