@@ -4,22 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>YumYum</title>
+    <link rel="stylesheet" th:href="@{/navbar.css}">
     <link rel="stylesheet" th:href="@{/home.css}">
 </head>
 <body>
 
-<!-- Navigation -->
-<header class="navbar">
-    <a th:href="@{/}" class="logo-link">
-        <img th:src="@{/images/yum yum logo.png}" alt="YumYum logo">
-    </a>
-
-    <nav>
-        <a th:href="@{/}" class="active">Home</a>
-        <a th:href="@{/posts/new}">＋ Post</a>
-        <a th:href="@{/profile}">Profile</a>
-    </nav>
-</header>
+<!--nav-->
+<div th:replace="~{fragments/navbar :: navbar('home')}"></div>
 
 <!-- Hero Banner -->
 <section class="hero">

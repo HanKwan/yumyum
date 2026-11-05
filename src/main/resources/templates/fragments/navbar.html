@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+    <header class="navbar" th:fragment="navbar(activePage)">
+        <a th:href="@{/}" class="logo-link">
+            <img th:src="@{/images/yum yum logo.png}" alt="YumYum logo">
+        </a>
+
+        <nav>
+            <a th:href="@{/}"
+               th:classappend="${activePage == 'home'} ? ' active' : ''">
+                Home
+            </a>
+
+            <a th:href="@{/posts/new}"
+               class="create-button"
+               th:classappend="${activePage == 'post'} ? ' active' : ''">
+                ＋ Post
+            </a>
+
+            <a th:href="@{/profile}"
+               th:classappend="${activePage == 'profile'} ? ' active' : ''">
+                Profile
+            </a>
+        </nav>
+    </header>
+</body>
+</html>

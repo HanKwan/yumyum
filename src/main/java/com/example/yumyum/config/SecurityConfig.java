@@ -8,6 +8,7 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.security.web.context.SecurityContextRepository;
 import com.example.yumyum.service.CustomUserDetailsService;
@@ -63,6 +64,7 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/",
                                 "/home.css",
+                                "/navbar.css",
                                 "/login",
                                 "/api/auth/register",
                                 "/api/auth/login",
@@ -78,6 +80,13 @@ public class SecurityConfig {
                                 "/images/**"
                         ).permitAll()
                         .anyRequest().authenticated()
+                )
+                .exceptionHandling(exception -> exception
+                        .defaultAuthenticationEntryPointFor(
+                                new LoginUrlAuthenticationEntryPoint("/login"),
+                                request -> request.getRequestURI().equals("/posts/new")
+                                        && "GET".equals(request.getMethod())
+                        )
                 )
                 .logout(logout -> logout
                         .logoutUrl("/api/auth/logout")

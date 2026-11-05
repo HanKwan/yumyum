@@ -5,19 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Yumyum</title>
     <link rel="stylesheet" th:href="@{/posts.css}">
+    <link rel="stylesheet" th:href="@{/navbar.css}">
 </head>
 
 <body>
-    <header class="navbar">
-        <a href="/posts" class="logo">yumyum<span>🍳</span></a>
-
-        <nav class="nav-links">
-            <a href="/posts" class="active">Posts</a>
-            <a th:href="@{/profile}">My Profile</a>
-        </nav>
-
-        <a href="/posts/new" class="create-button">+ Create Post</a>
-    </header>
+<div th:replace="~{fragments/navbar :: navbar('')}"></div>
 
     <main class="container">
         <section class="hero">
