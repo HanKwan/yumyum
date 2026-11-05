@@ -5,18 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create a Recipe | Yumyum</title>
     <link rel="stylesheet" th:href="@{/create-post.css}">
+    <link rel="stylesheet" th:href="@{/navbar.css}">
 </head>
 
 <body>
-    <header class="navbar">
-        <a href="/" class="logo">yumyum<span>🍳</span></a>
-
-        <nav class="nav-links">
-            <a href="/">Home</a>
-            <a href="/posts">Posts</a>
-            <a href="#">My Profile</a>
-        </nav>
-    </header>
+<!--nav-->
+<div th:replace="~{fragments/navbar :: navbar('post')}"></div>
 
     <main class="container">
         <a href="/posts" class="back-link">← Back to Posts</a>

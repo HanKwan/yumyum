@@ -36,11 +36,15 @@
                          th:each="post : ${posts}"
                          th:onclick="|window.location.href='/post-detail?id=${post.id}'|">
 
-                    <img
-                            th:src="${post.imageUrl}"
-                            th:alt="${post.title}"
-                            class="post-image"
-                    >
+                    <img th:if="${post.imageUrl != null and !post.imageUrl.isEmpty()}"
+                         th:src="${post.imageUrl}"
+                         th:alt="${post.title}"
+                         class="post-image">
+
+                    <div th:unless="${post.imageUrl != null and !post.imageUrl.isEmpty()}"
+                         class="post-image-placeholder">
+                        <span>YumYum</span>
+                    </div>
 
                     <div class="post-content">
                         <h3 th:text="${post.title}">Recipe Title</h3>
