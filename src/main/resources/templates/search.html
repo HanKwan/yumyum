@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results - YumYum</title>
+    <link rel="stylesheet" th:href="@{/navbar.css}">
+    <link rel="stylesheet" th:href="@{/footer.css}">
+    <link rel="stylesheet" th:href="@{/search.css}">
+</head>
+
+<body>
+    <div th:replace="~{fragments/navbar :: navbar('home')}"></div>
+
+    <main class="search-page">
+
+        <header class="search-header">
+            <h1>Search Results</h1>
+
+            <p th:if="${!#strings.isEmpty(query)}">
+                Results for "<span th:text="${query}"></span>"
+            </p>
+        </header>
+
+        <!-- Results found -->
+        <section class="search-results"
+                 th:if="${recipes != null and !recipes.isEmpty()}">
+
+            <p class="result-count">
+                Found <strong th:text="${recipes.size()}"></strong> recipes
+            </p>
+
+            <a class="search-result-card"
+               th:each="recipe : ${recipes}"
+               th:href="@{/recipe-detail(id=${recipe.path('idMeal').asText()})}">
+
+                <img th:if="${!recipe.path('strMealThumb').asText().isEmpty()}"
+                     th:src="${recipe.path('strMealThumb').asText()}"
+                     th:alt="${recipe.path('strMeal').asText()}">
+
+                <div th:unless="${!recipe.path('strMealThumb').asText().isEmpty()}"
+                     class="recipe-image-placeholder">
+                    <span>No image available</span>
+                </div>
+
+                <div class="recipe-info">
+
+                    <h2 th:text="${recipe.path('strMeal').asText()}">
+                        Recipe name
+                    </h2>
+
+                    <div class="recipe-tags">
+                        <span th:if="${!recipe.path('strCategory').asText().isEmpty()}"
+                              th:text="${recipe.path('strCategory').asText()}">
+                            Category
+                        </span>
+
+                        <span th:if="${!recipe.path('strArea').asText().isEmpty()}"
+                              th:text="${recipe.path('strArea').asText()}">
+                                Area
+                        </span>
+                    </div>
+
+                    <p class="recipe-description"
+                       th:text="${#strings.abbreviate(recipe.path('strInstructions').asText(''), 180)}">
+                        Recipe description
+                    </p>
+
+                    <span class="view-recipe">View Recipe →</span>
+                </div>
+            </a>
+        </section>
+
+        <!-- No results -->
+        <section class="empty-results"
+                 th:if="${recipes == null or recipes.isEmpty()}">
+
+            <h2>No recipes found</h2>
+            <p>
+                We couldn't find any recipes matching
+                "<span th:text="${query}"></span>".
+            </p>
+
+            <a th:href="@{/}" class="back-home">Back to Home</a>
+        </section>
+    </main>
+
+    <div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

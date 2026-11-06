@@ -505,6 +505,19 @@ public class PageController {
         }
     }
 
+    @GetMapping("/search")
+    public String searchRecipes(
+            @RequestParam(required = false) String query,
+            Model model) {
+
+        JsonNode recipes = externalRecipeService.searchRecipes(query);
+
+        model.addAttribute("recipes", recipes);
+        model.addAttribute("query", query == null ? "" : query.trim());
+
+        return "search";
+    }
+
     @GetMapping("/recipe-detail")
     public String showRecipeDetail(@RequestParam String id, Model model) {
 

@@ -276,6 +276,26 @@ public class ExternalRecipeService {
         }
     }
 
+    public JsonNode searchRecipes(String query) {
+        if (query == null || query.isBlank()) {
+            return JsonNodeFactory.instance.arrayNode();
+        }
+
+        try {
+            JsonNode response = recipeApiClient.searchRecipes(query.trim());
+            JsonNode meals = response == null ? null : response.path("meals");
+
+            if (meals == null || !meals.isArray()) {
+                return JsonNodeFactory.instance.arrayNode();
+            }
+
+            return meals;
+        } catch (RestClientException e) {
+            logger.warn("Failed to search recipes for query: {}", query, e);
+            return JsonNodeFactory.instance.arrayNode();
+        }
+    }
+
     private JsonNode getRecipesByIngredientOrEmpty(String ingredient) {
         try {
             JsonNode response = recipeApiClient.getRecipesByIngredient(ingredient);
