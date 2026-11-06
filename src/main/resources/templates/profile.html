@@ -31,11 +31,34 @@
                      alt="Default Profile Picture"
                      class="profile-photo">
 
-                <a th:if="${currentUserEmail != null and currentUserEmail == user.email}"
-                   th:href="@{/profile/edit}"
-                   class="photo-edit-button">
-                    +
-                </a>
+                <!-- changing profile pic without going to edit profile page-->
+                <form th:if="${currentUserEmail != null and currentUserEmail == user.email}"
+                      th:action="@{/profile/edit}"
+                      method="post"
+                      enctype="multipart/form-data"
+                      id="profileImageForm">
+
+                    <input type="hidden"
+                           name="username"
+                           th:value="${user.username}">
+
+                    <input type="hidden"
+                           name="bio"
+                           th:value="${user.bio}">
+
+                    <input type="hidden"
+                           th:name="${_csrf.parameterName}"
+                           th:value="${_csrf.token}">
+
+                    <input type="file"
+                           id="profileImageInput"
+                           name="profileImage"
+                           accept="image/*"
+                           hidden
+                           onchange="document.getElementById('profileImageForm').submit()">
+
+                    <label for="profileImageInput" class="photo-edit-button">+</label>
+                </form>
             </div>
 
             <div class="profile-info">

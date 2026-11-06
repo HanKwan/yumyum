@@ -2,47 +2,91 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Edit Profile</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Edit Profile | YumYum</title>
+
+    <link rel="stylesheet" th:href="@{/edit-profile.css}">
+    <link rel="stylesheet" th:href="@{/navbar.css}">
+    <link rel="stylesheet" th:href="@{/footer.css}">
 </head>
+
 <body>
-    <h1>Edit Profile</h1>
+    <div th:replace="~{fragments/navbar :: navbar('profile')}"></div>
 
-    <form th:action="@{/profile/edit}" method="post" enctype="multipart/form-data">
+    <main class="edit-container">
+        <section class="edit-card">
 
-        <div>
-            <label for="profileImage">Profile Picture</label>
-            <input type="file"
-                   id="profileImage"
-                   name="profileImage"
-                   accept="image/*">
-        </div>
+            <div class="page-heading">
+                <h1>Edit Profile</h1>
+                <p>Update your personal information</p>
+            </div>
 
-        <input type="hidden"
-               th:name="${_csrf.parameterName}"
-               th:value="${_csrf.token}">
+            <form th:action="@{/profile/edit}"
+                  method="post"
+                  enctype="multipart/form-data">
 
-        <label for="username">Username</label>
-        <input type="text"
-               id="username"
-               name="username"
-               th:value="${user.username}"
-               required>
+                <input type="hidden"
+                       th:name="${_csrf.parameterName}"
+                       th:value="${_csrf.token}">
 
-        <br><br>
+                <div class="photo-section">
+                    <img th:if="${user.profileImage != null and !user.profileImage.isEmpty()}"
+                         th:src="${user.profileImage}"
+                         alt="Profile Picture"
+                         class="profile-preview">
 
-        <label for="bio">Bio</label>
-        <textarea id="bio"
-                  name="bio"
-                  rows="4"
-                  maxlength="500"
-                  th:text="${user.bio}"></textarea>
+                    <img th:unless="${user.profileImage != null and !user.profileImage.isEmpty()}"
+                         th:src="@{/images/default-profile.png}"
+                         alt="Default Profile Picture"
+                         class="profile-preview">
 
-        <br><br>
+                    <div class="photo-info">
+                        <h3>Profile Picture</h3>
+                        <p>Choose a new picture for your profile.</p>
 
-        <button type="submit">Save Changes</button>
+                        <label for="profileImage" class="upload-button">
+                            Choose Photo
+                        </label>
 
-    </form>
+                        <input type="file"
+                               id="profileImage"
+                               name="profileImage"
+                               accept="image/*">
+                    </div>
+                </div>
 
-    <a th:href="@{/profile}">Cancel</a>
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text"
+                           id="username"
+                           name="username"
+                           th:value="${user.username}"
+                           required>
+                </div>
+
+                <div class="form-group">
+                    <label for="bio">Bio</label>
+                    <textarea id="bio"
+                              name="bio"
+                              rows="5"
+                              maxlength="500"
+                              placeholder="Tell others a little about yourself..."
+                              th:text="${user.bio}"></textarea>
+                    <small>Maximum 500 characters</small>
+                </div>
+
+                <div class="form-actions">
+                    <a th:href="@{/profile}" class="cancel-button">Cancel</a>
+                    <button type="submit" class="save-button">
+                        Save Changes
+                    </button>
+                </div>
+
+            </form>
+        </section>
+    </main>
+
+    <div th:replace="~{fragments/footer :: footer}"></div>
 </body>
 </html>

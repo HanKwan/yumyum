@@ -63,12 +63,8 @@ public class SecurityConfig {
                         ).authenticated()
                         .requestMatchers(
                                 "/",
-                                "/home.css",
-                                "/navbar.css",
                                 "/login",
                                 "/register",
-                                "/login.css",
-                                "/register.css",
                                 "/api/auth/register",
                                 "/api/auth/login",
                                 "/profile",
@@ -76,8 +72,7 @@ public class SecurityConfig {
                                 "/posts/**",
                                 "/post-detail",
                                 "/recipe-detail",
-                                "/posts.css",
-                                "/post-detail.css",
+                                "/*.css",
                                 "/css/**",
                                 "/js/**",
                                 "/images/**"

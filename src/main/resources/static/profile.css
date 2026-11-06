@@ -83,6 +83,7 @@ body {
     text-decoration: none;
 
     transition: 0.2s ease;
+    cursor: pointer;
 }
 
 .photo-edit-button:hover {

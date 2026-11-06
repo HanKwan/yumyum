@@ -3,54 +3,114 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title th:text="${recipe.get('strMeal').asText()}">Recipe Details</title>
+
+    <title th:text="${recipe.path('strMeal').asText()}">Recipe Details</title>
+
+    <link rel="stylesheet" th:href="@{/recipe-detail.css}">
+    <link rel="stylesheet" th:href="@{/navbar.css}">
+    <link rel="stylesheet" th:href="@{/footer.css}">
 </head>
+
 <body>
+    <div th:replace="~{fragments/navbar :: navbar('')}"></div>
 
-<a th:href="@{/}">← Back to Home</a>
+    <main class="recipe-container">
 
-<main>
-    <h1 th:text="${recipe.get('strMeal').asText()}"></h1>
-
-    <img th:src="${recipe.get('strMealThumb').asText()}"
-         th:alt="${recipe.get('strMeal').asText()}"
-         style="max-width: 400px; width: 100%;">
-
-    <p>
-        <span th:text="${recipe.get('strCategory').asText()}"></span>
-        ·
-        <span th:text="${recipe.get('strArea').asText()}"></span>
-    </p>
-
-    <h2>Ingredients</h2>
-    <ul>
-        <li th:each="i : ${#numbers.sequence(1, 20)}"
-            th:if="${!#strings.isEmpty(recipe.path('strIngredient' + i).asText())}">
-            <span th:text="${recipe.path('strIngredient' + i).asText()}"></span>
-            <span th:text="${recipe.path('strMeasure' + i).asText()}"></span>
-        </li>
-    </ul>
-
-    <h2>Instructions</h2>
-    <p style="white-space: pre-line;"
-       th:text="${recipe.get('strInstructions').asText()}"></p>
-
-    <p th:if="${!#strings.isEmpty(recipe.path('strYoutube').asText())}">
-        <a th:href="${recipe.path('strYoutube').asText()}"
-           target="_blank"
-           rel="noopener noreferrer">
-            Watch on YouTube
+        <a th:href="@{/}" class="back-link">
+            ← Back to Home
         </a>
-    </p>
 
-    <p th:if="${!#strings.isEmpty(recipe.path('strSource').asText())}">
-        <a th:href="${recipe.path('strSource').asText()}"
-           target="_blank"
-           rel="noopener noreferrer">
-            Original Recipe
-        </a>
-    </p>
-</main>
+        <!-- Recipe Header -->
+        <section class="recipe-header">
 
+            <div class="recipe-image-container">
+                <img th:src="${recipe.path('strMealThumb').asText()}"
+                     th:alt="${recipe.path('strMeal').asText()}"
+                     class="recipe-image">
+            </div>
+
+            <div class="recipe-info">
+                <p class="eyebrow">DISCOVER SOMETHING DELICIOUS</p>
+
+                <h1 th:text="${recipe.path('strMeal').asText()}">
+                    Recipe Name
+                </h1>
+
+                <div class="recipe-tags">
+                    <span th:text="${recipe.path('strCategory').asText()}">
+                        Category
+                    </span>
+
+                    <span th:text="${recipe.path('strArea').asText()}">
+                        Area
+                    </span>
+                </div>
+
+                <p class="recipe-intro">
+                    Explore this recipe and follow the steps to make it yourself.
+                </p>
+
+                <div class="recipe-links">
+
+                    <a th:if="${!#strings.isEmpty(recipe.path('strYoutube').asText())}"
+                       th:href="${recipe.path('strYoutube').asText()}"
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       class="recipe-link youtube-link">
+                        Watch on YouTube ↗
+                    </a>
+
+                    <a th:if="${!#strings.isEmpty(recipe.path('strSource').asText())}"
+                       th:href="${recipe.path('strSource').asText()}"
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       class="recipe-link source-link">
+                        Original Recipe ↗
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Ingredients -->
+        <section class="recipe-section">
+
+            <div class="section-heading">
+                <p class="eyebrow">WHAT YOU NEED</p>
+                <h2>Ingredients</h2>
+            </div>
+
+            <ul class="ingredient-list">
+                <li th:each="i : ${#numbers.sequence(1, 20)}"
+                    th:if="${!#strings.isEmpty(recipe.path('strIngredient' + i).asText())}">
+
+                    <span class="ingredient-name"
+                          th:text="${recipe.path('strIngredient' + i).asText()}">
+                        Ingredient
+                    </span>
+
+                    <span class="ingredient-measure"
+                          th:text="${recipe.path('strMeasure' + i).asText()}">
+                        Measurement
+                    </span>
+                </li>
+            </ul>
+        </section>
+
+        <!-- Instructions -->
+        <section class="recipe-section instructions-section">
+
+            <div class="section-heading">
+                <p class="eyebrow">LET'S GET COOKING</p>
+                <h2>Instructions</h2>
+            </div>
+
+            <p class="instructions-text"
+               th:text="${recipe.path('strInstructions').asText()}">
+                Recipe instructions
+            </p>
+        </section>
+    </main>
+
+    <div th:replace="~{fragments/footer :: footer}"></div>
 </body>
 </html>
