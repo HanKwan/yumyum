@@ -82,10 +82,22 @@
 
                 </div>
 
-                <div th:if="${currentUserEmail != null and currentUserEmail == user.email}">
+                <div class="profile-actions"
+                     th:if="${currentUserEmail != null and currentUserEmail == user.email}">
+
                     <a th:href="@{/profile/edit}" class="edit-button">
                         ✏️ Edit Profile
                     </a>
+
+                    <form th:action="@{/api/auth/logout}" method="post">
+                        <input type="hidden"
+                               th:name="${_csrf.parameterName}"
+                               th:value="${_csrf.token}">
+
+                        <button type="submit" class="logout-button">
+                            Log Out
+                        </button>
+                    </form>
                 </div>
             </div>
         </section>

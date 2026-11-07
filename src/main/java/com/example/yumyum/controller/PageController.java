@@ -8,6 +8,8 @@ import com.example.yumyum.repository.PostRepository;
 import com.example.yumyum.repository.ReviewRepository;
 import com.example.yumyum.service.ExternalRecipeService;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,6 +20,7 @@ import com.example.yumyum.repository.UserRepository;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.node.JsonNodeFactory;
 
@@ -184,7 +187,7 @@ public class PageController {
     public String createPost(
             @RequestParam String title,
             @RequestParam(required = false) String description,
-            @RequestParam(required = false) String imageUrl,
+            @RequestParam(required = false) MultipartFile imageFile,
             @RequestParam(required = false) String ingredients,
             @RequestParam(required = false) String instructions,
             Authentication authentication) {
@@ -192,9 +195,33 @@ public class PageController {
         Post post = new Post();
         post.setTitle(title);
         post.setDescription(description);
-        post.setImageUrl(imageUrl);
         post.setIngredients(ingredients);
         post.setInstructions(instructions);
+
+        // Handle uploaded recipe image
+        if (imageFile != null && !imageFile.isEmpty()) {
+
+            // Limit image size to 5 MB
+            if (imageFile.getSize() > 5 * 1024 * 1024) {
+                throw new ResponseStatusException(
+                        HttpStatus.BAD_REQUEST,
+                        "Image must be smaller than 5 MB."
+                );
+            }
+
+            try {
+                String imagePath = saveImage(imageFile, "recipes");
+                post.setImageUrl(imagePath);
+
+            } catch (IllegalArgumentException e) {
+                throw new ResponseStatusException(
+                        HttpStatus.BAD_REQUEST,
+                        e.getMessage()
+                );
+            } catch (IOException e) {
+                throw new RuntimeException("Failed to upload recipe image.", e);
+            }
+        }
 
         // Find the currently logged-in user
         User user = userRepository.findByEmail(authentication.getName())
@@ -267,10 +294,10 @@ public class PageController {
             @RequestParam Long id,
             @RequestParam String title,
             @RequestParam(required = false) String description,
-            @RequestParam(required = false) String imageUrl,
+            @RequestParam(required = false) MultipartFile imageFile,
             @RequestParam(required = false) String ingredients,
             @RequestParam(required = false) String instructions,
-            Authentication authentication) {
+            Authentication authentication) throws IOException {
 
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Post not found"));
@@ -284,13 +311,42 @@ public class PageController {
                     "You cannot edit another user's post");
         }
 
+        // Keep the existing image path
+        String oldImagePath = post.getImageUrl();
+
+        // Replace the image only when a new file is uploaded
+        if (imageFile != null && !imageFile.isEmpty()) {
+
+            if (imageFile.getSize() > 5 * 1024 * 1024) {
+                throw new ResponseStatusException(
+                        HttpStatus.BAD_REQUEST,
+                        "Image must be smaller than 5 MB."
+                );
+            }
+
+            try {
+                String newImagePath = saveImage(imageFile, "recipes");
+                post.setImageUrl(newImagePath);
+
+            } catch (IllegalArgumentException e) {
+                throw new ResponseStatusException(
+                        HttpStatus.BAD_REQUEST,
+                        e.getMessage()
+                );
+            }
+        }
+
         post.setTitle(title);
         post.setDescription(description);
-        post.setImageUrl(imageUrl);
         post.setIngredients(ingredients);
         post.setInstructions(instructions);
 
         postRepository.save(post);
+
+        // Delete the old image only after the post has been saved
+        if (imageFile != null && !imageFile.isEmpty()) {
+            deleteOldProfileImage(oldImagePath);
+        }
 
         return "redirect:/post-detail?id=" + post.getId();
     }
@@ -358,7 +414,9 @@ public class PageController {
         User user;
 
         if (id == null) {
-            if(authentication == null) {
+            if (authentication == null
+                    || !authentication.isAuthenticated()
+                    || authentication instanceof AnonymousAuthenticationToken) {
                 return "redirect:/login";
             }
 
@@ -459,18 +517,21 @@ public class PageController {
     }
 
     private String saveProfileImage(MultipartFile file) throws IOException {
+        return saveImage(file, "profiles");
+    }
 
-        // Get the file extension based on its image type
+    private String saveImage(MultipartFile file, String subfolder)
+            throws IOException {
+
         String extension = getImageExtension(file.getContentType());
 
-        // Generate a unique filename
         String filename = UUID.randomUUID() + extension;
 
-        // Create the upload directory if it doesn't exist
-        Path uploadPath = Paths.get(uploadDir);
+        Path uploadPath = Paths.get(uploadDir)
+                .resolve(subfolder);
+
         Files.createDirectories(uploadPath);
 
-        // Save the image
         Path filePath = uploadPath.resolve(filename);
 
         Files.copy(
@@ -479,27 +540,25 @@ public class PageController {
                 StandardCopyOption.REPLACE_EXISTING
         );
 
-        // Return the path that will be stored in MySQL
-        return "/uploads/" + filename;
+        return "/uploads/" + subfolder + "/" + filename;
     }
 
     private void deleteOldProfileImage(String imagePath) throws IOException {
 
-        // Do not delete the default image or any other image outside uploads
         if (imagePath == null || !imagePath.startsWith("/uploads/")) {
             return;
         }
 
-        // Get the upload directory
-        Path uploadPath = Paths.get(uploadDir).toAbsolutePath().normalize();
+        Path uploadPath = Paths.get(uploadDir)
+                .toAbsolutePath()
+                .normalize();
 
-        // Get only the filename from the old image path
-        String filename = Paths.get(imagePath).getFileName().toString();
+        String relativePath = imagePath.substring("/uploads/".length());
 
-        // Find the old image file
-        Path imageFile = uploadPath.resolve(filename).normalize();
+        Path imageFile = uploadPath.resolve(relativePath)
+                .normalize();
 
-        // Delete it only if it is inside the upload directory
+        // Prevent deleting files outside the upload directory
         if (imageFile.startsWith(uploadPath)) {
             Files.deleteIfExists(imageFile);
         }

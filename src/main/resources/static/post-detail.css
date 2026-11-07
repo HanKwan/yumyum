@@ -167,10 +167,36 @@ a {
     gap: 12px;
 }
 
-.review-header span {
+.review-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.review-header-actions span {
     color: #d69a36;
     font-size: 14px;
     font-weight: 600;
+}
+
+.review-header-actions form {
+    margin: 0;
+}
+
+.review-delete-button {
+    padding: 4px 10px;
+    border: 1px solid #e9cfc7;
+    border-radius: 5px;
+    background: transparent;
+    color: #b84e40;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.review-delete-button:hover {
+    background: #fbe9e4;
 }
 
 .review-item p {
@@ -230,33 +256,19 @@ a {
     line-height: 1.6;
 }
 
-.review-form button,
-.review-item form button {
+.review-form button {
     padding: 11px 20px;
     border: none;
     border-radius: 24px;
+    background: var(--green);
+    color: white;
     font-weight: 600;
     cursor: pointer;
     transition: background 0.2s;
 }
 
-.review-form button {
-    background: var(--green);
-    color: white;
-}
-
 .review-form button:hover {
     background: var(--green-dark);
-}
-
-.review-item form button {
-    margin-top: 10px;
-    background: #fbe9e4;
-    color: #b84e40;
-}
-
-.review-item form button:hover {
-    background: #f6d8d0;
 }
 
 .error-message {

@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -6,18 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Recipe | Yumyum</title>
     <link rel="stylesheet" th:href="@{/create-post.css}">
+    <link rel="stylesheet" th:href="@{/navbar.css}">
 </head>
 
     <body>
-        <header class="navbar">
-            <a href="/" class="logo">yumyum<span>🍳</span></a>
-
-            <nav class="nav-links">
-                <a href="/">Home</a>
-                <a href="/posts">Posts</a>
-                <a href="#">My Profile</a>
-            </nav>
-        </header>
+    <!-- nav-->
+    <div th:replace="~{fragments/navbar :: navbar('post')}"></div>
 
         <main class="container">
             <a href="/post-detail?id="
@@ -32,7 +25,8 @@
 
             <form class="post-form"
                   th:action="@{/posts/edit}"
-                  method="post">
+                  method="post"
+                  enctype="multipart/form-data">
 
                 <input type="hidden" name="id" th:value="${post.id}">
 
@@ -64,15 +58,23 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="imageUrl">Image URL</label>
-                    <input
-                            type="url"
-                            id="imageUrl"
-                            name="imageUrl"
-                            th:value="${post.imageUrl}"
-                            placeholder="https://example.com/your-recipe.jpg"
-                    >
-                    <p class="field-hint">Add a link to a photo of your dish.</p>
+                    <label for="imageFile">Recipe Image</label>
+
+                    <div th:if="${post.imageUrl != null and !post.imageUrl.isEmpty()}">
+                        <p class="field-hint">Current image:</p>
+                        <img th:src="${post.imageUrl}"
+                             alt="Current recipe image"
+                             style="max-width: 250px; border-radius: 10px; margin-bottom: 12px;">
+                    </div>
+
+                    <input type="file"
+                           id="imageFile"
+                           name="imageFile"
+                           accept="image/*">
+
+                    <p class="field-hint">
+                        Choose a new image only if you want to replace the current one.
+                    </p>
                 </div>
 
                 <div class="form-group">
